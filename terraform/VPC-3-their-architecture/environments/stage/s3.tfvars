@@ -1,10 +1,10 @@
 s3_buckets = {
-  useearna-stage-infrastructure = {
-    bucket = "useearna-stage-infrastructure"
+  usetersu-stage-infrastructure = {
+    bucket = "usetersu-stage-infrastructure"
     tags = {
-      Name        = "useearna-stage-infrastructure"
+      Name        = "usetersu-stage-infrastructure"
       Environment = "stage"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
     encryption_algorithm = "AES256"
     versioning_status = "Enabled"

@@ -6,7 +6,7 @@ nat_gateways = {
     tags = {
       Name        = "private1-prod"
       Environment = "prod"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   }
 }

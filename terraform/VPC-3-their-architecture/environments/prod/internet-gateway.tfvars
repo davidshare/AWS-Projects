@@ -5,7 +5,7 @@ internet_gateways = {
     tags = {
       Name        = "main-prod"
       Environment = "prod"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   }
 }

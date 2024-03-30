@@ -1,10 +1,10 @@
 s3_buckets = {
-  useearna-prod-infrastructure = {
-    bucket = "useearna-prod-infrastructure"
+  usetersu-prod-infrastructure = {
+    bucket = "usetersu-prod-infrastructure"
     tags = {
-      Name        = "useearna-prod-infrastructure"
+      Name        = "usetersu-prod-infrastructure"
       Environment = "prod"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
     encryption_algorithm = "AES256"
     versioning_status = "Enabled"

@@ -8,8 +8,8 @@ aws_subnets = {
     tags = {
       Name = "Public Subnet 1 prod"
       Environment = "prod"
-      Owner = "Earna"
-      "kubernetes.io/cluster/earna-prod" = "owned"
+      Owner = "Tersu"
+      "kubernetes.io/cluster/tersu-prod" = "owned"
       "kubernetes.io/role/internal-elb" = "1"
       "kubernetes.io/service-name" = "ingress-nginx/ingress-nginx-controller"
     }
@@ -23,8 +23,8 @@ aws_subnets = {
     tags = {
       Name = "Private Subnet 1 prod"
       Environment = "prod"
-      Owner = "Earna"
-      "kubernetes.io/cluster/earna-prod" = "owned"
+      Owner = "Tersu"
+      "kubernetes.io/cluster/tersu-prod" = "owned"
       "kubernetes.io/role/internal-elb" = "1"
       "kubernetes.io/service-name" = "ingress-nginx/ingress-nginx-controller"
 
@@ -39,8 +39,8 @@ aws_subnets = {
     tags = {
       Name = "Private Subnet 2 prod"
       Environment = "prod"
-      Owner = "Earna"
-      "kubernetes.io/cluster/earna-prod" = "owned"
+      Owner = "Tersu"
+      "kubernetes.io/cluster/tersu-prod" = "owned"
       "kubernetes.io/role/internal-elb" = "1"
       "kubernetes.io/service-name" = "ingress-nginx/ingress-nginx-controller"
     }

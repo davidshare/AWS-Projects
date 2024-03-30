@@ -8,10 +8,7 @@ aws_subnets = {
     tags = {
       Name = "Public Subnet 1 stage"
       Environment = "stage"
-      Owner = "Earna"
-      "kubernetes.io/cluster/earna-stage" = "owned"
-      "kubernetes.io/role/internal-elb" = "1"
-      "kubernetes.io/service-name" = "ingress-nginx/ingress-nginx-controller"
+      Owner = "Tersu"
     }
   },
   private1-stage = {
@@ -23,10 +20,7 @@ aws_subnets = {
     tags = {
       Name = "Private Subnet 1 stage"
       Environment = "stage"
-      Owner = "Earna"
-      "kubernetes.io/cluster/earna-stage" = "owned"
-      "kubernetes.io/role/internal-elb" = "1"
-      "kubernetes.io/service-name" = "ingress-nginx/ingress-nginx-controller"
+      Owner = "Tersu"
     }
   },
   private2-stage = {
@@ -38,10 +32,7 @@ aws_subnets = {
     tags = {
       Name = "Private Subnet 2 stage"
       Environment = "stage"
-      Owner = "Earna"
-      "kubernetes.io/cluster/earna-stage" = "owned"
-      "kubernetes.io/role/internal-elb" = "1"
-      "kubernetes.io/service-name" = "ingress-nginx/ingress-nginx-controller"
+      Owner = "Tersu"
     }
   }
 }

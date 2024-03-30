@@ -5,7 +5,7 @@ internet_gateways = {
     tags = {
       Name        = "main-stage"
       Environment = "stage"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   }
 }

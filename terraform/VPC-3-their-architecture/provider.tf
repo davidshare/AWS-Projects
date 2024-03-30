@@ -13,6 +13,6 @@ terraform {
 # Configure the AWS Provider
 provider "aws" {
   region = "eu-north-1"
-  profile= "earna"
+  profile= "tersu"
 }
 

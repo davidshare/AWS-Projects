@@ -3,14 +3,14 @@ route_tables = {
     vpc = "main-stage"
     tags = {
       Name = "public-stage"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   },
   "private-stage" = {
     vpc = "main-stage"
     tags = {
       Name = "private-stage"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   }
 }

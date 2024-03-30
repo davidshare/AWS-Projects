@@ -3,14 +3,14 @@ route_tables = {
     vpc = "main-prod"
     tags = {
       Name = "public-prod"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   },
   "private-prod" = {
     vpc = "main-prod"
     tags = {
       Name = "private-prod"
-      Owner = "Earna"
+      Owner = "Tersu"
     }
   }
 }
