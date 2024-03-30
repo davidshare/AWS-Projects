@@ -1,6 +1,6 @@
 # Terraform Project: VPC 3-Tier Architecture
 
-## Overview
+## Architecture Overview
 
 This Terraform project is designed to deploy a 3-tier architecture on AWS using infrastructure-as-code principles. The architecture includes a 
 
@@ -48,7 +48,39 @@ The project directory structure is organized as follows:
       - **backend-s3.hcl**: HCL configuration file for Terraform remote backend in production environment.
     - **stage**: Subdirectory for staging environment configurations (similar structure to prod).
 
-## Usage
+## Design Decisions
+- **3-Tier Architecture:** The architecture is divided into three tiers: presentation (public subnet), application (private subnet), and data (private subnet) tiers, providing improved security and scalability.
+
+- **VPC Configuration:** The VPC is designed with public and private subnets across multiple Availability Zones for high availability and fault tolerance.
+- **NAT Gateways:** NAT Gateways are deployed in each public subnet to allow instances in private subnets to access the internet while maintaining security.
+- **Security Groups:** Security groups are used to control inbound and outbound traffic to EC2 instances, DynamoDB tables, and S3 buckets, ensuring only necessary connections are allowed.
+- **DynamoDB and S3:** DynamoDB tables and S3 buckets are provisioned to store and manage data for the application, providing scalable and durable storage solutions.
+- **State Locking:** DynamoDB is used for locking Terraform state to prevent concurrent modifications and ensure consistency during deployments.
+- **State Storage:** Terraform state is stored in an S3 bucket to provide a centralized location for managing state files and enabling collaboration among team members.
+
+
+# Prerequisites
+* An AWS Account with an IAM user capable of creating resources – `AdminstratorAccess`
+* A locally configured AWS profile for the above IAM user
+* Terraform installation - [steps](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+* AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
+* Environment Variables for AWS CLI - [steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
+* tfupdate installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
+* tfsec installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
+
+## Requirements
+| Name          | Version       |
+| ------------- |:-------------:|
+| terraform     | ~>1.7.5       |
+| aws           | ~>5.43.0      |
+
+## Providers
+| Name          | Version       |
+| ------------- |:-------------:|
+| aws           | ~>5.43.0      |
+
+# How to deploy
+# Todo
 
 To deploy the 3-tier architecture using Terraform:
 
@@ -63,15 +95,25 @@ To deploy the 3-tier architecture using Terraform:
 
 Replace <environment> with the name of the environment you want to deploy (e.g., prod, stage).
 
-## Design Decisions
-- **3-Tier Architecture:** The architecture is divided into three tiers: presentation (public subnet), application (private subnet), and data (private subnet) tiers, providing improved security and scalability.
+# How to destroy
+# Todo
 
-- **VPC Configuration:** The VPC is designed with public and private subnets across multiple Availability Zones for high availability and fault tolerance.
-- **NAT Gateways:** NAT Gateways are deployed in each public subnet to allow instances in private subnets to access the internet while maintaining security.
-- **Security Groups:** Security groups are used to control inbound and outbound traffic to EC2 instances, DynamoDB tables, and S3 buckets, ensuring only necessary connections are allowed.
-- **DynamoDB and S3:** DynamoDB tables and S3 buckets are provisioned to store and manage data for the application, providing scalable and durable storage solutions.
-- **State Locking:** DynamoDB is used for locking Terraform state to prevent concurrent modifications and ensure consistency during deployments.
-- **State Storage:** Terraform state is stored in an S3 bucket to provide a centralized location for managing state files and enabling collaboration among team members.
+## Resources
+| Name          | Type       |
+| ------------- |:-------------:|
+| [aws_launch_template](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_launch_template) | resource |
+| [aws_db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_db_instance) | resource |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_vpc) | resource |
+| [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_subnet) | resource |
+| [aws_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_internet_gateway) | resource |
+| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table) | resource |
+| [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
+| [aws_lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb) | resource |
+| [aws_lb_listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb_listener) | resource |
+| [aws_lb_target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb_target_group) | resource |
+| [aws_autoscaling_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_autoscaling_group) | resource |
+| [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_db_subnet_group) | resource |
+| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_security_group) | resource |
 
 ## Contributors
 [David Essien](https://github.com/davidshare) - Project Lead & Maintainer
