@@ -9,11 +9,9 @@ This Terraform project is designed to deploy a 3-tier architecture on AWS using 
 - **2 private subnets for the backend application**
 - **2 private subnets for the database tier** 
 - **1 Internet Gateway**
-- **NAT Gateways**
-- **security groups**
-- **EC2 instances**
-- **DynamoDB tables**
-- **S3 buckets** 
+- **2 NAT Gateways for each availability zone**
+- **1 DynamoDB table**
+- **1 S3 bucket** 
 
 The project is structured to support different environments, such as production and staging, with configurable variables for each environment. It also supports adding more resources using the values file.
 
@@ -27,8 +25,9 @@ The project directory structure is organized as follows:
   - **vpc.tf**: Terraform configuration file for creating the Virtual Private Cloud (VPC) and associated resources.
   - **subnets.tf**: Terraform configuration file for creating public and private subnets within the VPC.
   - **nat-gateways.tf**: Terraform configuration file for creating NAT Gateways for outbound internet access from private subnets.
+  - **internet-gateway.tf**: Terraform configuration file for creating Internet Gateways for inbound internet access to the vpc.
+  - **elastic-ips.tf**: Terraform configuration for creating elastic ips
   - **routes.tf**: Terraform configuration file for defining route tables and route associations.
-  - **security-groups.tf**: Terraform configuration file for creating security groups to control inbound and outbound traffic.
   - **ec2-ssh.tf**: Terraform configuration file for launching EC2 instances with SSH access.
   - **dynamodb.tf**: Terraform configuration file for provisioning DynamoDB tables.
   - **s3.tf**: Terraform configuration file for creating S3 buckets.
@@ -36,15 +35,17 @@ The project directory structure is organized as follows:
   - **terraform.sh**: Shell script for initializing and applying Terraform configurations.
   - **environments**: Directory containing environment-specific configurations.
     - **prod**: Subdirectory for production environment configurations.
-      - **main.tfvars**: Terraform variables file for production environment.
-      - **vpc.tfvars**: Terraform variables file for VPC configuration in production environment.
-      - **subnets.tfvars**: Terraform variables file for subnets configuration in production environment.
-      - **nat-gateway.tfvars**: Terraform variables file for NAT Gateway configuration in production environment.
-      - **routes.tfvars**: Terraform variables file for route configuration in production environment.
-      - **security-groups.tfvars**: Terraform variables file for security groups configuration in production environment.
-      - **ec2-ssh.tfvars**: Terraform variables file for EC2 instance configuration in production environment.
-      - **dynamodb.tfvars**: Terraform variables file for DynamoDB configuration in production environment.
-      - **s3.tfvars**: Terraform variables file for S3 configuration in production environment.
+      - **main.tfvars**: The values file for production environment.
+      - **vpc.tfvars**: The values file for VPC configuration in production environment.
+      - **subnets.tfvars**: The values file for subnets configuration in production environment.
+      - **nat-gateway.tfvars**: The values file for NAT Gateway configuration in production environment.
+      - **nat-gateway.tfvars**: The values file for Internet Gateway configuration in production environment.
+      - **elastic-ips.tfvars**: The values file for elastic ips
+      - **routes.tfvars**: The values file for route configuration in production environment.
+      - **security-groups.tfvars**: The values file for security groups configuration in production environment.
+      - **ec2-ssh.tfvars**: The values file for EC2 instance configuration in production environment.
+      - **dynamodb.tfvars**: the values file for DynamoDB configuration in production environment.
+      - **s3.tfvars**: The values file for S3 configuration in production environment.
       - **backend-s3.hcl**: HCL configuration file for Terraform remote backend in production environment.
     - **stage**: Subdirectory for staging environment configurations (similar structure to prod).
 
@@ -101,19 +102,16 @@ Replace <environment> with the name of the environment you want to deploy (e.g.,
 ## Resources
 | Name          | Type       |
 | ------------- |:-------------:|
-| [aws_launch_template](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_launch_template) | resource |
-| [aws_db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_db_instance) | resource |
 | [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_vpc) | resource |
 | [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_subnet) | resource |
 | [aws_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_internet_gateway) | resource |
+| [aws_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_internet_gateway) | resource |
 | [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table) | resource |
 | [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
-| [aws_lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb) | resource |
-| [aws_lb_listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb_listener) | resource |
-| [aws_lb_target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb_target_group) | resource |
-| [aws_autoscaling_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_autoscaling_group) | resource |
-| [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_db_subnet_group) | resource |
-| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_security_group) | resource |
+| [aws_dynamo_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
+| [aws_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
+| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
+| [aws_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
 
 ## Contributors
 [David Essien](https://github.com/davidshare) - Project Lead & Maintainer
