@@ -1,12 +1,12 @@
 aws_vpcs = {
-  main-stage = {
-    cidr = "10.1.0.0/16"
+  main = {
+    cidr = "10.20.0.0/16"
     tenancy = "default"
     enable_dns_hostnames = true
     enable_dns_support = true
     tags = {
-      Name = "tersu stage"
-      Description = "Tersu main Main VPC"
+      Name = "Main"
+      Description = "Tersu Main VPC"
       Owner = "Tersu"
       Environment = "stage"
     }

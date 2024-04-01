@@ -51,12 +51,12 @@ internet_gateway_routes = {
 }
 
 nat_gateway_routes = {
-  private1-app = {
+  private1-nat = {
     route_table = "private-app"
     cidr        = "0.0.0.0/0"
     gateway     = "main"
   },
-  private2-app = {
+  private2-nat = {
     route_table = "private-app"
     cidr        = "0.0.0.0/0"
     gateway     = "main"

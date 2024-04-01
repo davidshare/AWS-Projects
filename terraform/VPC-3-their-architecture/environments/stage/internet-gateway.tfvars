@@ -1,9 +1,9 @@
 internet_gateways = {
   main = {
     name = "main"
-    vpc       = "main-stage"
+    vpc       = "main"
     tags = {
-      Name        = "main-stage"
+      Name        = "main"
       Environment = "stage"
       Owner = "Tersu"
     }

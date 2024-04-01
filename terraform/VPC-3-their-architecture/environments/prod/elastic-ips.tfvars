@@ -1,5 +1,5 @@
 elastic_ips = {
-  private1-app-nat = {
+  private1-nat = {
     domain = "vpc",
     tags = {
       Name = "private1-app",
@@ -8,7 +8,7 @@ elastic_ips = {
     }
   },
 
-  private2-app-nat = {
+  private2-nat = {
     domain = "vpc",
     tags = {
       Name = "private2-app",

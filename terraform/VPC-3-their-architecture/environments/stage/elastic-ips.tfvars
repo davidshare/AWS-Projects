@@ -7,6 +7,7 @@ elastic_ips = {
       Owner = "Tersu"
     }
   },
+  
   private2-nat = {
     domain = "vpc",
     tags = {

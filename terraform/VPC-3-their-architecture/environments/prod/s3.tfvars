@@ -1,8 +1,8 @@
 s3_buckets = {
-  usetersu-prod-infrastructure = {
-    bucket = "usetersu-prod-infrastructure"
+  tersu-prod-infrastructure = {
+    bucket = "tersu-prod-infrastructure"
     tags = {
-      Name        = "usetersu-prod-infrastructure"
+      Name        = "tersu-prod-infrastructure"
       Environment = "prod"
       Owner = "Tersu"
     }
