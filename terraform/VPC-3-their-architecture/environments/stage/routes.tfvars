@@ -1,47 +1,64 @@
 route_tables = {
-  "public-stage" = {
-    vpc = "main-stage"
+  "public-web" = {
+    vpc = "main"
     tags = {
-      Name = "public-stage"
+      Name = "public-web"
       Owner = "Tersu"
     }
   },
-  "private-stage" = {
-    vpc = "main-stage"
+  "private-app" = {
+    vpc = "main"
     tags = {
-      Name = "private-stage"
+      Name = "private-app"
       Owner = "Tersu"
     }
   }
 }
 
+subnets_route_table_association = {
+  public1-web = {
+    route_table = "public-web"
+    subnet      = "public1-web"
+  },
+  public2-web = {
+    route_table = "public-web"
+    subnet      = "public2-web"
+  },
+  private1-app = {
+    route_table = "private-app"
+    subnet      = "private1-app"
+  },
+  private2-app = {
+    route_table = "private-app"
+    subnet      = "private2-app"
+  },
+  private1-db = {
+    route_table = "private-app"
+    subnet      = "private1-db"
+  },
+  private2-db = {
+    route_table = "private-app"
+    subnet      = "private2-db"
+  },
+}
+
 internet_gateway_routes = {
-  public1-stage = {
-    route_table = "public-stage"
+  public-web = {
+    route_table = "public-web"
     cidr        = "0.0.0.0/0"
     gateway     = "main"
   }
 }
 
 nat_gateway_routes = {
-  private1-stage = {
-    route_table = "private-stage"
+  private1-app = {
+    route_table = "private-app"
     cidr        = "0.0.0.0/0"
     gateway     = "main"
   },
-}
-
-subnets_route_table_association = {
-  public1-stage = {
-    route_table = "public-stage"
-    subnet      = "public1-stage"
-  },
-  private1-stage = {
-    route_table = "private-stage"
-    subnet      = "private1-stage"
-  },
-  private2-stage = {
-    route_table = "private-stage"
-    subnet      = "private2-stage"
+  private2-app = {
+    route_table = "private-app"
+    cidr        = "0.0.0.0/0"
+    gateway     = "main"
   },
 }
