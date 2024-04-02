@@ -4,18 +4,64 @@
 
 This Terraform project is designed to deploy a 3-tier architecture on AWS using infrastructure-as-code principles. The architecture includes a 
 
-- **1 Virtual Private Cloud (VPC)**
-- **2 public subnets for the frontend**
-- **2 private subnets for the backend application**
-- **2 private subnets for the database tier** 
-- **1 Internet Gateway**
-- **2 NAT Gateways for each availability zone**
+- **1 AWS keypair**
 - **1 DynamoDB table**
 - **1 S3 bucket** 
+- **1 Virtual Private Cloud (VPC)**
+- **2 Public subnets for the frontend**
+- **2 Private subnets for the backend application**
+- **2 Private subnets for the database tier** 
+- **1 Internet Gateway**
+- **2 Elastic IPs for the NAT gateways**
+- **2 NAT Gateways for each availability zone**
+- **2 route tables**
+- **2 route tables associations for the subnets, internet gateway, and NAT gateways**
 
 The project is structured to support different environments, such as production and staging, with configurable variables for each environment. It also supports adding more resources using the values file.
 
 ## Project Structure
+```
+├── dynamodb.tf
+├── ec2-ssh.tf
+├── environments
+│   ├── prod
+│   │   ├── backend-s3.hcl
+│   │   ├── dynamodb.tfvars
+│   │   ├── ec2-ssh.tfvars
+│   │   ├── elastic-ips.tfvars
+│   │   ├── internet-gateway.tfvars
+│   │   ├── main.tfvars
+│   │   ├── nat-gateway.tfvars
+│   │   ├── routes.tfvars
+│   │   ├── s3.tfvars
+│   │   ├── subnets.tfvars
+│   │   ├── terraform.tfvars
+│   │   └── vpc.tfvars
+│   └── stage
+│       ├── backend-s3.hcl
+│       ├── dynamodb.tfvars
+│       ├── ec2-ssh.tfvars
+│       ├── elastic-ips.tfvars
+│       ├── internet-gateway.tfvars
+│       ├── main.tfvars
+│       ├── nat-gateway.tfvars
+│       ├── routes.tfvars
+│       ├── s3.tfvars
+│       ├── subnets.tfvars
+│       ├── terraform.tfvars
+│       └── vpc.tfvars
+├── internet-gateway.tf
+├── main.tf
+├── nat-gateways.tf
+├── output.tf
+├── provider.tf
+├── README.md
+├── routes.tf
+├── s3.tf
+├── subnets.tf
+├── terraform.sh
+└── vpc.tf
+```
 
 The project directory structure is organized as follows:
 
@@ -50,12 +96,10 @@ The project directory structure is organized as follows:
     - **stage**: Subdirectory for staging environment configurations (similar structure to prod).
 
 ## Design Decisions
-- **3-Tier Architecture:** The architecture is divided into three tiers: presentation (public subnet), application (private subnet), and data (private subnet) tiers, providing improved security and scalability.
+- **3-Tier Architecture:** The architecture is divided into three tiers: web (public subnet), application (private subnet), and data (private subnet) tiers, providing improved security and scalability.
 
 - **VPC Configuration:** The VPC is designed with public and private subnets across multiple Availability Zones for high availability and fault tolerance.
 - **NAT Gateways:** NAT Gateways are deployed in each public subnet to allow instances in private subnets to access the internet while maintaining security.
-- **Security Groups:** Security groups are used to control inbound and outbound traffic to EC2 instances, DynamoDB tables, and S3 buckets, ensuring only necessary connections are allowed.
-- **DynamoDB and S3:** DynamoDB tables and S3 buckets are provisioned to store and manage data for the application, providing scalable and durable storage solutions.
 - **State Locking:** DynamoDB is used for locking Terraform state to prevent concurrent modifications and ensure consistency during deployments.
 - **State Storage:** Terraform state is stored in an S3 bucket to provide a centralized location for managing state files and enabling collaboration among team members.
 
@@ -66,8 +110,6 @@ The project directory structure is organized as follows:
 * Terraform installation - [steps](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 * AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
 * Environment Variables for AWS CLI - [steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
-* tfupdate installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
-* tfsec installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
 
 ## Requirements
 | Name          | Version       |
@@ -85,33 +127,55 @@ The project directory structure is organized as follows:
 
 To deploy the 3-tier architecture using Terraform:
 
-1. Clone this repository to your local machine.
-2. Navigate to the `terraform/VPC-3-their-architecture` directory.
+1. Clone this repository to your local machine 
+```bash
+  git clone git@github.com:davidshare/AWS-Projects.git
+```
+2. Navigate to the project directory
+```bash
+  terraform/VPC-3-their-architecture` directory.
+```
 3. Update the Terraform variable files (`*.tfvars`) in the `environments` directory with your desired configuration for each environment (e.g., production, staging).
-4. Run the `terraform.sh` script to initialize Terraform and apply the configurations:
+   
+4. Run the `terraform.sh` script to initialize Terraform:
 
 ```bash
-./terraform.sh apply <environment>
+./terraform.sh <environment> init
 ```
 
-Replace <environment> with the name of the environment you want to deploy (e.g., prod, stage).
+Replace `<environment>` with the name of the environment you want to deploy (e.g., prod, stage).
 
-# How to destroy
-# Todo
+5. Run the plan command to view the planned changes
 
-## Resources
+```bash
+./terraform.sh <environment> plan
+```
+
+6. Run the apply command to apply the proposed changes
+
+```bash
+./terraform.sh <environment> apply
+```
+
+7. Run the destroy command to destroy all resources
+
+```bash
+./terraform.sh <environment> destroy
+```
+
+## Terraform Resources
 | Name          | Type       |
 | ------------- |:-------------:|
-| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_vpc) | resource |
-| [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_subnet) | resource |
-| [aws_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_internet_gateway) | resource |
-| [aws_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_internet_gateway) | resource |
-| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table) | resource |
-| [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
-| [aws_dynamo_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
-| [aws_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
-| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
-| [aws_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
+| [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
+| [aws_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
+| [aws_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
+| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
+| [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
+| [aws_dynamodb_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
+| [aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
+| [aws_eip](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
 
 ## Contributors
-[David Essien](https://github.com/davidshare) - Project Lead & Maintainer
+[David Essien](https://github.com/davidshare) - Maintainer
