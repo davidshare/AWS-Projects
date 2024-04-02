@@ -1,6 +1,7 @@
 # Terraform Project: VPC 3-Tier Architecture
 
 ## Architecture Overview
+![image Architecture diagram for AWS 3-tier architecture](../../images/AWS%203-tier%20architecture.png)
 
 This Terraform project is designed to deploy a 3-tier architecture on AWS using infrastructure-as-code principles. The architecture includes a 
 
