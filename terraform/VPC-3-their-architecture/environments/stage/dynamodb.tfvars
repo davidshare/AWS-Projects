@@ -6,5 +6,10 @@ dynamodb_tables = {
     write_capacity = 5
     hash_key       = "LockID"
     hash_key_type  = "S"
+
+    tags = {
+      Name        = "Terraform state lock"
+      Description = "Table for locking terraform state"
+    }
   }
 }

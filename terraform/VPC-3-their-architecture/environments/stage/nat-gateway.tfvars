@@ -5,8 +5,7 @@ nat_gateways = {
     subnet     = "frontend1"
     tags = {
       Name        = "Backend NAT 1"
-      Environment = "stage"
-      Owner       = "Tersu"
+      Description = "Natgateway 1"
     }
   },
   backend2 = {
@@ -15,8 +14,7 @@ nat_gateways = {
     subnet     = "frontend2"
     tags = {
       Name        = "Backend NAT 2"
-      Environment = "prod"
-      Owner       = "Tersu"
+      Description = "Natgateway 2"
     }
   }
 }

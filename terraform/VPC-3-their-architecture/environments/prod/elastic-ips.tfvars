@@ -3,8 +3,7 @@ elastic_ips = {
     domain = "vpc",
     tags = {
       Name        = "Backend1",
-      Environment = "prod",
-      Owner       = "Tersu"
+      Description = "Elastic IP for natgateway 1"
     }
   },
 
@@ -12,8 +11,7 @@ elastic_ips = {
     domain = "vpc",
     tags = {
       Name        = "Backend2",
-      Environment = "prod",
-      Owner       = "Tersu"
+      Description = "Elastic IP for natgateway 2"
     }
   }
 }

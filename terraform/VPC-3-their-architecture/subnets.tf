@@ -9,5 +9,5 @@ resource "aws_subnet" "subnets" {
   map_public_ip_on_launch = each.value.map_public_ip_on_launch
   tags                    = merge(each.value.tags, local.tags)
 
-  depends_on = [ aws_vpc.vpcs ]
+  depends_on = [aws_vpc.vpcs]
 }

@@ -1,22 +1,20 @@
 nat_gateways = {
-  private1-nat = {
-    vpc        = "main"
-    elastic_ip = "private1-nat"
-    subnet     = "public1-web"
+  backend1 = {
+    vpc        = "tersu"
+    elastic_ip = "backend1-nat"
+    subnet     = "frontend1"
     tags = {
-      Name        = "Private NAT 1"
-      Environment = "prod"
-      Owner       = "Tersu"
+      Name        = "Backend NAT 1"
+      Description = "Natgateway 1"
     }
   },
-  private2-nat = {
-    vpc        = "main"
-    elastic_ip = "private2-nat"
-    subnet     = "public2-web"
+  backend2 = {
+    vpc        = "tersu"
+    elastic_ip = "backend2-nat"
+    subnet     = "frontend2"
     tags = {
-      Name        = "Private NAT 2"
-      Environment = "prod"
-      Owner       = "Tersu"
+      Name        = "Backend NAT 2"
+      Description = "Natgateway 2"
     }
   }
 }

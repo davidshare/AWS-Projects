@@ -1,63 +1,63 @@
 route_tables = {
-  "public-web" = {
-    vpc = "main"
+  "frontend" = {
+    vpc = "tersu"
     tags = {
-      Name  = "public-web"
-      Owner = "Tersu"
+      Name        = "Frontend"
+      Description = "route table for the public subnets"
     }
   },
-  "private-app" = {
-    vpc = "main"
+  "backend" = {
+    vpc = "tersu"
     tags = {
-      Name  = "private-app"
-      Owner = "Tersu"
+      Name        = "Backend"
+      Description = "route table for the private subnets"
     }
   }
 }
 
 subnets_route_table_association = {
-  public1-web = {
-    route_table = "public-web"
-    subnet      = "public1-web"
+  frontend1 = {
+    route_table = "frontend"
+    subnet      = "frontend1"
   },
-  public2-web = {
-    route_table = "public-web"
-    subnet      = "public2-web"
+  frontend2 = {
+    route_table = "frontend"
+    subnet      = "frontend2"
   },
-  private1-app = {
-    route_table = "private-app"
-    subnet      = "private1-app"
+  backend1 = {
+    route_table = "backend"
+    subnet      = "backend1"
   },
-  private2-app = {
-    route_table = "private-app"
-    subnet      = "private2-app"
+  backend2 = {
+    route_table = "backend"
+    subnet      = "backend2"
   },
-  private1-db = {
-    route_table = "private-app"
-    subnet      = "private1-db"
+  database1 = {
+    route_table = "backend"
+    subnet      = "database1"
   },
-  private2-db = {
-    route_table = "private-app"
-    subnet      = "private2-db"
+  database2 = {
+    route_table = "backend"
+    subnet      = "database2"
   },
 }
 
 internet_gateway_routes = {
   public-web = {
-    route_table = "public-web"
+    route_table = "frontend"
     cidr        = "0.0.0.0/0"
-    gateway     = "main"
+    gateway     = "tersu"
   }
 }
 
 nat_gateway_routes = {
-  private1-nat = {
-    route_table = "private-app"
+  backend1 = {
+    route_table = "backend"
     cidr        = "0.0.0.0/0"
     gateway     = "main"
   },
-  private2-nat = {
-    route_table = "private-app"
+  backend2 = {
+    route_table = "backend"
     cidr        = "0.0.0.0/0"
     gateway     = "main"
   },

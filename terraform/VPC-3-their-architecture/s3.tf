@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "s3_buckets" {
   for_each = var.s3_buckets
 
   bucket = each.key
-  tags   = each.value.tags
+  tags   = merge(each.value.tags, local.tags)
 
   lifecycle {
     prevent_destroy = true

@@ -5,7 +5,7 @@ aws_subnets = {
     availability_zone       = "us-east-1a"
     map_public_ip_on_launch = true
     tags = {
-      Name = "Frontend 1"
+      Name        = "Frontend 1"
       Description = "Tersu Public subnet 1"
     }
   }
@@ -15,7 +15,7 @@ aws_subnets = {
     availability_zone       = "us-east-1b"
     map_public_ip_on_launch = true
     tags = {
-      Name = "Frontend 2"
+      Name        = "Frontend 2"
       Description = "Tersu Public subnet 2"
     }
   }
@@ -25,7 +25,7 @@ aws_subnets = {
     availability_zone       = "us-east-1a"
     map_public_ip_on_launch = false
     tags = {
-      Name = "Backend 1"
+      Name        = "Backend 1"
       Description = "Tersu Private subnet 1"
     }
   }
@@ -35,7 +35,7 @@ aws_subnets = {
     availability_zone       = "us-east-1b"
     map_public_ip_on_launch = false
     tags = {
-      Name = "Backend 2"
+      Name        = "Backend 2"
       Description = "Tersu Private subnet 2"
     }
   }
@@ -45,7 +45,7 @@ aws_subnets = {
     availability_zone       = "us-east-1a"
     map_public_ip_on_launch = false
     tags = {
-      Name = "Database 1"
+      Name        = "Database 1"
       Description = "Tersu Database subnet 1"
     }
   }
@@ -55,7 +55,7 @@ aws_subnets = {
     availability_zone       = "us-east-1b"
     map_public_ip_on_launch = false
     tags = {
-      Name = "Database 2"
+      Name        = "Database 2"
       Description = "Tersu Database subnet 2"
     }
   }

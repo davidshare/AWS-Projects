@@ -127,18 +127,21 @@ The project directory structure is organized as follows:
 # Todo
 
 To deploy the 3-tier architecture using Terraform:
+1. Create the s3 bucket and dynamodb table to hold the state and state lock manually
 
-1. Clone this repository to your local machine 
+2. Clone this repository to your local machine 
 ```bash
   git clone git@github.com:davidshare/AWS-Projects.git
 ```
-2. Navigate to the project directory
+
+3. Navigate to the project directory
 ```bash
   terraform/VPC-3-their-architecture` directory.
 ```
-3. Update the Terraform variable files (`*.tfvars`) in the `environments` directory with your desired configuration for each environment (e.g., production, staging).
+4. Update the Terraform variable files (`*.tfvars`) in the `environments` directory with your desired configuration for each environment (e.g., production, staging).
+
    
-4. Run the `terraform.sh` script to initialize Terraform:
+5. Run the `terraform.sh` script to initialize Terraform:
 
 ```bash
 ./terraform.sh <environment> init
@@ -146,19 +149,31 @@ To deploy the 3-tier architecture using Terraform:
 
 Replace `<environment>` with the name of the environment you want to deploy (e.g., prod, stage).
 
-5. Run the plan command to view the planned changes
+6. import them using the following commands
+
+Bucket
+```bash
+  ./terraform.sh stage import 'aws_s3_bucket.s3_buckets[\"tersu-stage-infrastructure\"]' tersu-stage-infrastructure
+```
+Dynamo db table
+
+```bash
+./terraform.sh stage import 'aws_dynamodb_table.dynamodb_tables[\"terraform_lock\"]' terraform-stage-statelock
+```
+
+7. Run the plan command to view the planned changes
 
 ```bash
 ./terraform.sh <environment> plan
 ```
 
-6. Run the apply command to apply the proposed changes
+8. Run the apply command to apply the proposed changes
 
 ```bash
 ./terraform.sh <environment> apply
 ```
 
-7. Run the destroy command to destroy all resources
+9. Run the destroy command to destroy all resources
 
 ```bash
 ./terraform.sh <environment> destroy

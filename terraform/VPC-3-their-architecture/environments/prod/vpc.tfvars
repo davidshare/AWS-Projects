@@ -5,10 +5,8 @@ aws_vpcs = {
     enable_dns_hostnames = true
     enable_dns_support   = true
     tags = {
-      Name        = "Main"
+      Name        = "Tersu Main"
       Description = "Tersu Main VPC"
-      Owner       = "Tersu"
-      Environment = "prod"
     }
   }
 }
