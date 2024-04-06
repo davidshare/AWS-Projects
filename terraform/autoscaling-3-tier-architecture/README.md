@@ -9,6 +9,7 @@ This Terraform project is designed to deploy a 3-tier architecture with Autoscal
 - **1 S3 bucket**
 - **Autoscaling groups for the frontend and backend tiers**
 - **Elastic Load Balancers for the frontend and backend tiers**
+- **listeners and target groups for the loadbalancers**
 
 The project is structured to support different environments, such as production and staging, with configurable variables for each environment. It also supports adding more resources using the values file.
 
