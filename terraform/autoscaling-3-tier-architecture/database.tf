@@ -11,7 +11,7 @@ resource "aws_db_subnet_group" "database-subnet-groups" {
   tags = merge(each.values.tags, locals.tags)
 }
 
-resource "aws_db_instance" "db-instances" {
+resource "aws_db_instance" "db_instances" {
   for_each = var.db_instances
 
   allocated_storage      = each.value.allocated_storage

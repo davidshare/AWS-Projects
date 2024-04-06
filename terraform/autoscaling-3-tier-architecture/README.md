@@ -10,6 +10,7 @@ This Terraform project is designed to deploy a 3-tier architecture with Autoscal
 - **Autoscaling groups for the frontend and backend tiers**
 - **Elastic Load Balancers for the frontend and backend tiers**
 - **listeners and target groups for the loadbalancers**
+- **RDS instances**
 
 The project is structured to support different environments, such as production and staging, with configurable variables for each environment. It also supports adding more resources using the values file.
 
@@ -156,6 +157,8 @@ Replace `<environment>` with the name of the environment you want to deploy (e.g
 | [aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
 | [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) | resource |
+| [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
 
 ## Contributors
 [David Essien](https://github.com/davidshare) - Maintainer
