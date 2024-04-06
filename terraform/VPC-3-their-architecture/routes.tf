@@ -1,14 +1,14 @@
-variable route_tables {}
-variable subnets_route_table_association {}
-variable internet_gateway_routes {}
-variable nat_gateway_routes {}
+variable "route_tables" {}
+variable "subnets_route_table_association" {}
+variable "internet_gateway_routes" {}
+variable "nat_gateway_routes" {}
 
 # Route tables
 resource "aws_route_table" "route_tables" {
   for_each = var.route_tables
 
   vpc_id = aws_vpc.vpcs[each.value.vpc].id
-  tags   = each.value.tags
+  tags   = merge(each.value.tags, local.tags)
 }
 
 # Route table associations

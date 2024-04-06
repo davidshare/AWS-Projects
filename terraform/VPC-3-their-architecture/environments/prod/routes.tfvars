@@ -2,14 +2,14 @@ route_tables = {
   "public-web" = {
     vpc = "main"
     tags = {
-      Name = "public-web"
+      Name  = "public-web"
       Owner = "Tersu"
     }
   },
   "private-app" = {
     vpc = "main"
     tags = {
-      Name = "private-app"
+      Name  = "private-app"
       Owner = "Tersu"
     }
   }

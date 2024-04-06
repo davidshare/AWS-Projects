@@ -12,7 +12,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "eu-north-1"
-  profile= "tersu"
+  region  = "us-east-1"
+  profile = "cyberdavid1"
 }
 

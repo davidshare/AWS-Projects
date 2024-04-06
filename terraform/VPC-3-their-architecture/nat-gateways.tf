@@ -8,7 +8,7 @@ resource "aws_nat_gateway" "nat_gateways" {
 
   allocation_id = aws_eip.nat_elastic_ips[each.value.elastic_ip].id
   subnet_id     = aws_subnet.subnets[each.value.subnet].id
-  tags          = each.value.tags
+  tags          = merge(each.value.tags, local.tags)
 
-  depends_on = [ aws_eip.nat_elastic_ips ]
+  depends_on = [aws_eip.nat_elastic_ips]
 }

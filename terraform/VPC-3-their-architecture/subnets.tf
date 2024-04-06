@@ -7,7 +7,7 @@ resource "aws_subnet" "subnets" {
   cidr_block              = each.value.cidr_block
   availability_zone       = each.value.availability_zone
   map_public_ip_on_launch = each.value.map_public_ip_on_launch
-  tags                    = each.value.tags
+  tags                    = merge(each.value.tags, local.tags)
 
   depends_on = [ aws_vpc.vpcs ]
 }

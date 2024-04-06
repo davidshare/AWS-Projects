@@ -1,19 +1,19 @@
 elastic_ips = {
-  private1-nat = {
+  backend1-nat = {
     domain = "vpc",
     tags = {
-      Name = "private1-app",
+      Name        = "Backend1",
       Environment = "prod",
-      Owner = "Tersu"
+      Owner       = "Tersu"
     }
   },
 
-  private2-nat = {
+  backend2-nat = {
     domain = "vpc",
     tags = {
-      Name = "private2-app",
+      Name        = "Backend2",
       Environment = "prod",
-      Owner = "Tersu"
+      Owner       = "Tersu"
     }
   }
 }

@@ -1,19 +1,17 @@
 elastic_ips = {
-  private1-nat = {
+  backend1-nat = {
     domain = "vpc",
     tags = {
-      Name = "private1-app",
-      Environment = "stage",
-      Owner = "Tersu"
+      Name        = "Backend1",
+      Description = "Elastic IP for natgateway 1"
     }
   },
-  
-  private2-nat = {
+
+  backend2-nat = {
     domain = "vpc",
     tags = {
-      Name = "private2-app",
-      Environment = "stage",
-      Owner = "Tersu"
+      Name        = "Backend2",
+      Description = "Elastic IP for natgateway 2"
     }
   }
 }

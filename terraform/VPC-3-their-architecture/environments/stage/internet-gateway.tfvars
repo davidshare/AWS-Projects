@@ -1,11 +1,10 @@
 internet_gateways = {
-  main = {
-    name = "main"
-    vpc       = "main"
+  tersu = {
+    name = "tersu igw"
+    vpc  = "tersu"
     tags = {
-      Name        = "main"
-      Environment = "stage"
-      Owner = "Tersu"
+      Name        = "tersu igw"
+      Description = "internet gateway for the tersu project"
     }
   }
 }

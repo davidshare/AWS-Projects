@@ -4,11 +4,11 @@ s3_buckets = {
     tags = {
       Name        = "tersu-prod-infrastructure"
       Environment = "prod"
-      Owner = "Tersu"
+      Owner       = "Tersu"
     }
     encryption_algorithm = "AES256"
-    versioning_status = "Enabled"
-    acl = "private"
-    object_ownership = "BucketOwnerPreferred"
+    versioning_status    = "Enabled"
+    acl                  = "private"
+    object_ownership     = "BucketOwnerPreferred"
   }
 }
