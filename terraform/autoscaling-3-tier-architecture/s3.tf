@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "s3_buckets" {
   for_each = var.s3_buckets
 
   bucket = each.key
-  tags = each.value.tags
+  tags   = each.value.tags
 
   lifecycle {
     prevent_destroy = true
@@ -54,7 +54,7 @@ resource "aws_s3_bucket_ownership_controls" "bucket_ownership_controls" {
 
 resource "aws_s3_bucket_versioning" "s3_bucket_versionings" {
   for_each = var.s3_buckets
-  
+
   bucket = aws_s3_bucket.s3_buckets[each.key].id
   versioning_configuration {
     status = each.value.versioning_status

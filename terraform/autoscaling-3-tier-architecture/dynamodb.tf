@@ -16,9 +16,9 @@ resource "aws_dynamodb_table" "dynamodb_tables" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes = [ 
+    ignore_changes = [
       billing_mode,
       read_capacity,
-      write_capacity ]
+    write_capacity]
   }
 }

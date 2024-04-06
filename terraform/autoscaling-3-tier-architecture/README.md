@@ -1,109 +1,88 @@
 # Terraform Project: 3-tier architecture with autoscaling group and loadbalancing
-
 ## Architecture Overview
-![image Architecture diagram for AWS 3-tier architecture](../../images/AWS%203-tier%20architecture.svg)
+![image Architecture diagram for AWS 3-tier architecture with Autoscaling](../../images/AWS%203-tier%20architecture%20with%20Autoscaling.svg)
 
-This Terraform project is designed to deploy a 3-tier architecture on AWS using infrastructure-as-code principles. The architecture includes a 
+This Terraform project is designed to deploy a 3-tier architecture with Autoscaling on AWS using infrastructure-as-code principles. The architecture includes:
 
 - **1 AWS keypair**
 - **1 DynamoDB table**
-- **1 S3 bucket** 
-- **1 Virtual Private Cloud (VPC)**
-- **2 Public subnets for the frontend**
-- **2 Private subnets for the backend application**
-- **2 Private subnets for the database tier** 
-- **1 Internet Gateway**
-- **2 Elastic IPs for the NAT gateways**
-- **2 NAT Gateways for each availability zone**
-- **2 route tables**
-- **2 route tables associations for the subnets, internet gateway, and NAT gateways**
+- **1 S3 bucket**
+- **Autoscaling groups for the frontend and backend tiers**
+- **Elastic Load Balancers for the frontend and backend tiers**
 
 The project is structured to support different environments, such as production and staging, with configurable variables for each environment. It also supports adding more resources using the values file.
 
 ## Project Structure
 ```
+.
+├── autoscaling-groups.tf
+├── database.tf
 ├── dynamodb.tf
 ├── ec2-ssh.tf
+├── elastic-loadbalancer.tf
 ├── environments
-│   ├── prod
-│   │   ├── backend-s3.hcl
-│   │   ├── dynamodb.tfvars
-│   │   ├── ec2-ssh.tfvars
-│   │   ├── elastic-ips.tfvars
-│   │   ├── internet-gateway.tfvars
-│   │   ├── main.tfvars
-│   │   ├── nat-gateway.tfvars
-│   │   ├── routes.tfvars
-│   │   ├── s3.tfvars
-│   │   ├── subnets.tfvars
-│   │   ├── terraform.tfvars
-│   │   └── vpc.tfvars
-│   └── stage
-│       ├── backend-s3.hcl
-│       ├── dynamodb.tfvars
-│       ├── ec2-ssh.tfvars
-│       ├── elastic-ips.tfvars
-│       ├── internet-gateway.tfvars
-│       ├── main.tfvars
-│       ├── nat-gateway.tfvars
-│       ├── routes.tfvars
-│       ├── s3.tfvars
-│       ├── subnets.tfvars
-│       ├── terraform.tfvars
-│       └── vpc.tfvars
-├── internet-gateway.tf
+│   ├── prod
+│   │   ├── autoscaling-groups.tfvars
+│   │   ├── backend-s3.hcl
+│   │   ├── dynamodb.tfvars
+│   │   ├── ec2-ssh.tfvars
+│   │   ├── elastic-loadbalancer.tfvars
+│   │   ├── main.tfvars
+│   │   ├── s3.tfvars
+│   │   └── terraform.tfvars
+│   └── stage
+│       ├── autoscaling-groups.tfvars
+│       ├── backend-s3.hcl
+│       ├── dynamodb.tfvars
+│       ├── ec2-ssh.tfvars
+│       ├── elastic-loadbalancer.tfvars
+│       ├── main.tfvars
+│       ├── s3.tfvars
+│       └── terraform.tfvars
+├── files
+│   ├── deploy-backend.sh
+│   └── deploy-frontend.sh
 ├── main.tf
-├── nat-gateways.tf
 ├── output.tf
 ├── provider.tf
 ├── README.md
-├── routes.tf
 ├── s3.tf
-├── subnets.tf
-├── terraform.sh
-└── vpc.tf
+├── security-groups.tf
+└── terraform.sh
 ```
 
 The project directory structure is organized as follows:
 
-- **terraform/VPC-3-their-architecture**: Root directory containing the main Terraform configuration files.
-  - **main.tf**: Main Terraform configuration file defining the resources and modules for the 3-tier architecture.
+- **terraform/Autoscaling-3-tier-architecture**: Root directory containing the main Terraform configuration files.
+  - **main.tf**: Main Terraform configuration file defining the resources and modules for the 3-tier architecture with Autoscaling.
   - **provider.tf**: Terraform provider configuration file specifying the AWS provider and version.
-  - **vpc.tf**: Terraform configuration file for creating the Virtual Private Cloud (VPC) and associated resources.
-  - **subnets.tf**: Terraform configuration file for creating public and private subnets within the VPC.
-  - **nat-gateways.tf**: Terraform configuration file for creating NAT Gateways for outbound internet access from private subnets.
-  - **internet-gateway.tf**: Terraform configuration file for creating Internet Gateways for inbound internet access to the vpc.
-  - **elastic-ips.tf**: Terraform configuration for creating elastic ips
-  - **routes.tf**: Terraform configuration file for defining route tables and route associations.
+  - **autoscaling-groups.tf**: Terraform configuration file for creating Autoscaling Groups for the frontend and backend tiers.
+  - **elastic-loadbalancer.tf**: Terraform configuration file for creating Elastic Load Balancers for the frontend and backend tiers.
+  - **database.tf**: Terraform configuration file for creating the database tier resources.
   - **ec2-ssh.tf**: Terraform configuration file for launching EC2 instances with SSH access.
   - **dynamodb.tf**: Terraform configuration file for provisioning DynamoDB tables.
   - **s3.tf**: Terraform configuration file for creating S3 buckets.
+  - **security-groups.tf**: Terraform configuration file for defining security groups.
   - **output.tf**: Terraform configuration file for defining output variables.
   - **terraform.sh**: Shell script for initializing and applying Terraform configurations.
   - **environments**: Directory containing environment-specific configurations.
     - **prod**: Subdirectory for production environment configurations.
       - **main.tfvars**: The values file for production environment.
-      - **vpc.tfvars**: The values file for VPC configuration in production environment.
-      - **subnets.tfvars**: The values file for subnets configuration in production environment.
-      - **nat-gateway.tfvars**: The values file for NAT Gateway configuration in production environment.
-      - **nat-gateway.tfvars**: The values file for Internet Gateway configuration in production environment.
-      - **elastic-ips.tfvars**: The values file for elastic ips
-      - **routes.tfvars**: The values file for route configuration in production environment.
-      - **security-groups.tfvars**: The values file for security groups configuration in production environment.
+      - **autoscaling-groups.tfvars**: The values file for Autoscaling Groups configuration in production environment.
+      - **elastic-loadbalancer.tfvars**: The values file for Elastic Load Balancers configuration in production environment.
       - **ec2-ssh.tfvars**: The values file for EC2 instance configuration in production environment.
       - **dynamodb.tfvars**: the values file for DynamoDB configuration in production environment.
       - **s3.tfvars**: The values file for S3 configuration in production environment.
       - **backend-s3.hcl**: HCL configuration file for Terraform remote backend in production environment.
     - **stage**: Subdirectory for staging environment configurations (similar structure to prod).
+  - **files**: Directory containing scripts for deploying the frontend and backend applications.
 
 ## Design Decisions
 - **3-Tier Architecture:** The architecture is divided into three tiers: web (public subnet), application (private subnet), and data (private subnet) tiers, providing improved security and scalability.
-
-- **VPC Configuration:** The VPC is designed with public and private subnets across multiple Availability Zones for high availability and fault tolerance.
-- **NAT Gateways:** NAT Gateways are deployed in each public subnet to allow instances in private subnets to access the internet while maintaining security.
+- **Autoscaling Groups:** Autoscaling Groups are used for the frontend and backend tiers to automatically scale the infrastructure based on demand.
+- **Elastic Load Balancers:** Elastic Load Balancers are used to distribute traffic across the instances in the Autoscaling Groups.
 - **State Locking:** DynamoDB is used for locking Terraform state to prevent concurrent modifications and ensure consistency during deployments.
 - **State Storage:** Terraform state is stored in an S3 bucket to provide a centralized location for managing state files and enabling collaboration among team members.
-
 
 # Prerequisites
 * An AWS Account with an IAM user capable of creating resources – `AdminstratorAccess`
@@ -124,9 +103,8 @@ The project directory structure is organized as follows:
 | aws           | ~>5.43.0      |
 
 # How to deploy
-# Todo
 
-To deploy the 3-tier architecture using Terraform:
+To deploy the 3-tier architecture with Autoscaling using Terraform:
 
 1. Clone this repository to your local machine 
 ```bash
@@ -134,7 +112,7 @@ To deploy the 3-tier architecture using Terraform:
 ```
 2. Navigate to the project directory
 ```bash
-  terraform/VPC-3-their-architecture` directory.
+  terraform/autoscaling-3-their-architecture` directory.
 ```
 3. Update the Terraform variable files (`*.tfvars`) in the `environments` directory with your desired configuration for each environment (e.g., production, staging).
    
