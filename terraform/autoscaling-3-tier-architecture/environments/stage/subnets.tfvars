@@ -1,0 +1,1 @@
+subnet_names = ["Frontend-1", "Frontend-2", "Backend-1", "Backend-2", "Database-1", "Database-2"]

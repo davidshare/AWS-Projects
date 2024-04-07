@@ -1,12 +1,14 @@
 variable "project" {}
-variable "createdby" {}
+variable "createdBy" {}
 variable "environment" {}
+variable "owner" {}
 
 locals {
   tags = {
-    Project     = var.project
-    createdby   = var.createdby
+    project     = var.project
+    createdby   = var.createdBy
     CreatedOn   = timestamp()
     Environment = var.environment
+    Owner       = var.owner
   }
 }

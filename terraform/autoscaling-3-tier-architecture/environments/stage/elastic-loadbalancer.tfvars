@@ -1,26 +1,26 @@
 albs = {
   frontend = {
-    name                       = "frontend loadbalancer"
+    name                       = "frontend"
     internal                   = false
-    loadbalancer_type          = "application"
-    security_groups            = [alb_security_group]
-    subnets                    = ["public1-web", "public2-web"]
+    load_balancer_type         = "application"
+    security_groups            = ["ALB-Security-Group"]
+    subnets                    = ["Frontend-1", "Frontend-2"]
     enable_deletion_protection = false
 
     tags = {
-      Name = "Frontend Loadbalancer"
+      Name = "Frontend-Loadbalancer"
     }
   },
   backend = {
-    name                       = "backend loadbalancer"
+    name                       = "backend"
     internal                   = false
-    loadbalancer_type          = "application"
-    security_groups            = [alb_security_group]
-    subnets                    = ["private1-app", "private2-app"]
+    load_balancer_type         = "application"
+    security_groups            = ["ALB-Security-Group"]
+    subnets                    = ["Backend-1", "Backend-2"]
     enable_deletion_protection = false
 
     tags = {
-      Name = "Backend Loadbalancer"
+      Name = "Backend-Loadbalancer"
     }
   }
 }
@@ -28,7 +28,7 @@ albs = {
 
 lb_target_groups = {
   frontend = {
-    name     = "Frontend target group"
+    name     = "Frontend"
     port     = 80
     protocol = "HTTP"
     vpc      = "main"
@@ -39,7 +39,7 @@ lb_target_groups = {
     }
   },
   backend = {
-    name     = "Backend target group"
+    name     = "Backend"
     port     = 80
     protocol = "HTTP"
     vpc      = "main"

@@ -21,4 +21,6 @@ resource "aws_dynamodb_table" "dynamodb_tables" {
       read_capacity,
     write_capacity]
   }
+
+  tags = merge(each.value.tags, local.tags)
 }

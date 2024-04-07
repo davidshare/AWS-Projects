@@ -5,15 +5,15 @@ variable "autoscaling_groups" {}
 resource "aws_launch_template" "launch_templates" {
   for_each = var.launch_templates
 
-  name          = "${var.project} ${each.value.name}"
+  name          = "${var.project}-${each.value.name}"
   image_id      = each.value.image_id
   instance_type = each.value.instance_type
   key_name      = each.value.key_name
   user_data     = filebase64("${each.value.user_data}")
 
   network_interfaces {
-    subnet_id       = each.value.network_specifications.subnet_id
-    security_groups = [each.value.network_specifications.security_groups]
+    subnet_id       = each.value.network_interfaces.subnet_id
+    security_groups = [for sg in each.value.network_interfaces.security_groups : aws_security_group.frontend_security_group[sg].id]
   }
 
   tag_specifications {
