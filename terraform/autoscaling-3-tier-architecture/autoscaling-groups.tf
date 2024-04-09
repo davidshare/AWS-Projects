@@ -43,6 +43,7 @@ resource "aws_autoscaling_group" "autoscaling_groups" {
 
   launch_template {
     id = aws_launch_template.launch_templates[each.value.launch_template].id
+    version = "$Latest"
   }
 
   depends_on = [aws_launch_template.launch_templates]
