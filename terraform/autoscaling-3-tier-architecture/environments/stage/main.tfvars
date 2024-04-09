@@ -1,4 +1,4 @@
 environment = "stage"
-project     = "Tersu"
+project     = "tersu"
 createdBy   = "David Essien"
 owner       = "Tersu"

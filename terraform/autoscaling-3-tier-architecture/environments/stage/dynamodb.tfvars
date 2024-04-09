@@ -1,6 +1,6 @@
 dynamodb_tables = {
-  "terraform_lock" = {
-    name           = "terraform-stage-statelock"
+  "infrastructure_state_lock" = {
+    name           = "terraform-state-lock"
     billing_mode   = "PROVISIONED"
     read_capacity  = 5
     write_capacity = 5
@@ -8,7 +8,7 @@ dynamodb_tables = {
     hash_key_type  = "S"
 
     tags = {
-      Name        = "Terraform state lock"
+      Name        = "infrastructure-state-lock"
       Description = "Table for locking terraform state"
     }
   }

@@ -29,7 +29,7 @@ TERRAFORM_BINARY=${TERRAFORM_BINARY:-"/usr/bin/env terraform"}
 
 # We have to support Bash <4, so use indirection
 ENVIRONMENTS=(stage prod)
-TERRAFORM_BUCKETS=(tersu-stage-infrastructure tersu-prod-infrastructure)
+TERRAFORM_BUCKETS=(tersu-infrastructure-state)
 
 COMMANDS=("apply" "destroy" "import" "init" "plan" "refresh" "state")
 TEMPFILES=()

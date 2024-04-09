@@ -3,7 +3,7 @@ variable "s3_buckets" {}
 resource "aws_s3_bucket" "s3_buckets" {
   for_each = var.s3_buckets
 
-  bucket = each.key
+  bucket = "${var.project}-${each.value.bucket}"
   tags   = merge(each.value.tags, local.tags)
 
   lifecycle {

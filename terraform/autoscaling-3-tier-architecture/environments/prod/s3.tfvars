@@ -1,14 +1,13 @@
 s3_buckets = {
-  tersu-prod-infrastructure = {
-    bucket = "tersu-prod-infrastructure"
-    tags = {
-      Name        = "tersu-prod-infrastructure"
-      Environment = "prod"
-      Owner       = "Tersu"
-    }
+  infrastructure_state = {
+    bucket               = "infrastructure-state"
     encryption_algorithm = "AES256"
     versioning_status    = "Enabled"
     acl                  = "private"
     object_ownership     = "BucketOwnerPreferred"
+    tags = {
+      Name        = "infrastructure-state"
+      Description = "S3 bucket to store terraform state"
+    }
   }
 }

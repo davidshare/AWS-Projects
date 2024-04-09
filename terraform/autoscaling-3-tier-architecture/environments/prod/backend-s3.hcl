@@ -1,4 +1,4 @@
 region         = "us-east-1"
-bucket         = "tersu-prod-infrastructure"
+bucket         = "tersu-infrastructure-state"
 key            = "terraform/terraform.tfstate"
-dynamodb_table = "terraform-prod-statelock"
+dynamodb_table = "tersu-infrastructure-state-lock"

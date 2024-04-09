@@ -129,19 +129,32 @@ The project directory structure is organized as follows:
 To deploy the 3-tier architecture using Terraform:
 1. Create the s3 bucket and dynamodb table to hold the state and state lock manually
 
+```bash
+  aws s3api create-bucket --bucket tersu-infrastructure-state --region us-east-1
+```
+
+```bash
+  aws dynamodb create-table \
+      --table-name tersu-infrastructure-state-lock \
+      --attribute-definitions AttributeName=LockID,AttributeType=S \
+      --key-schema AttributeName=LockID,KeyType=HASH \
+      --billing-mode PROVISIONED \
+      --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+```
+
 2. Clone this repository to your local machine 
 ```bash
   git clone git@github.com:davidshare/AWS-Projects.git
 ```
 
-3. Navigate to the project directory
+1. Navigate to the project directory
 ```bash
   terraform/VPC-3-their-architecture` directory.
 ```
-4. Update the Terraform variable files (`*.tfvars`) in the `environments` directory with your desired configuration for each environment (e.g., production, staging).
+1. Update the Terraform variable files (`*.tfvars`) in the `environments` directory with your desired configuration for each environment (e.g., production, staging).
 
    
-5. Run the `terraform.sh` script to initialize Terraform:
+2. Run the `terraform.sh` script to initialize Terraform:
 
 ```bash
 ./terraform.sh <environment> init

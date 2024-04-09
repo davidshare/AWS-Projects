@@ -3,7 +3,7 @@ variable "dynamodb_tables" {}
 resource "aws_dynamodb_table" "dynamodb_tables" {
   for_each = var.dynamodb_tables
 
-  name           = each.value.name
+  name           = "${var.project}-${each.value.name}"
   billing_mode   = each.value.billing_mode
   read_capacity  = each.value.read_capacity
   write_capacity = each.value.write_capacity
@@ -19,7 +19,8 @@ resource "aws_dynamodb_table" "dynamodb_tables" {
     ignore_changes = [
       billing_mode,
       read_capacity,
-    write_capacity]
+      write_capacity
+    ]
   }
 
   tags = merge(each.value.tags, local.tags)

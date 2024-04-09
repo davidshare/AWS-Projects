@@ -1,7 +1,6 @@
 variable "albs" {}
 variable "lb_target_groups" {}
 variable "alb_listeners" {}
-variable "lb_target_groups_attachment" {}
 
 resource "aws_lb" "albs" {
   for_each = var.albs
@@ -9,11 +8,15 @@ resource "aws_lb" "albs" {
   name                       = each.value.name
   internal                   = each.value.internal
   load_balancer_type         = each.value.load_balancer_type
-  security_groups            = each.value.security_groups
+  security_groups            = [for sg in each.value.security_groups : aws_security_group.alb_security_group[sg].id]
   subnets                    = [for subnet in each.value.subnets : local.subnet_ids_map[subnet]]
   enable_deletion_protection = each.value.enable_deletion_protection
 
   tags = merge(each.value.tags, local.tags)
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "aws_lb_target_group" "lb_target_groups" {
@@ -22,20 +25,12 @@ resource "aws_lb_target_group" "lb_target_groups" {
   name     = each.value.name
   port     = each.value.port
   protocol = each.value.protocol
-  vpc_id   = each.value.vpc
+  vpc_id   = data.aws_vpc.selected.id
 
   health_check {
     path    = each.value.health_check.path
     matcher = each.value.health_check.matcher
   }
-}
-
-resource "aws_lb_target_group_attachment" "lb_target_group_attachments" {
-  for_each = var.lb_target_groups_attachment
-
-  target_group_arn = each.value.target_arn
-  target_id        = each.value.target_id
-  port             = each.value.port
 }
 
 resource "aws_lb_listener" "alb_listeners" {

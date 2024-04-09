@@ -1,12 +1,12 @@
 s3_buckets = {
-  tersu-stage-infrastructure = {
-    bucket               = "tersu-stage-infrastructure"
+  infrastructure_state = {
+    bucket               = "infrastructure-state"
     encryption_algorithm = "AES256"
     versioning_status    = "Enabled"
     acl                  = "private"
     object_ownership     = "BucketOwnerPreferred"
     tags = {
-      Name        = "terraform state"
+      Name        = "infrastructure-state"
       Description = "S3 bucket to store terraform state"
     }
   }

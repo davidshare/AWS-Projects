@@ -1,6 +1,6 @@
 dynamodb_tables = {
   "terraform_lock" = {
-    name           = "terraform-stage-statelock"
+    name           = "infrastructure-state-lock"
     billing_mode   = "PROVISIONED"
     read_capacity  = 5
     write_capacity = 5
