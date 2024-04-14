@@ -1,8 +1,17 @@
 #!/bin/bash
 
 # Install required packages
+
+DB_HOST="${db_host}"
+DB_NAME="${db_name}"
+DB_USERNAME="${username}"
+DB_PASSWORD="${password}"
+
 sudo apt-get update
-sudo apt-get install -y python3 python3-pip postgresql-client
+sudo apt-get install -y python3 python3-pip postgresql-client python3.10-venv libpq-dev
+
+mkdir phonebook
+cd phonebook
 
 # Create Python virtual environment
 python3 -m venv phonebook-env
@@ -12,21 +21,21 @@ source phonebook-env/bin/activate
 pip install flask psycopg2
 
 # Create the Python file
-cat > phonebook_api.py <<EOF
+sudo tee ./phonebook.py << 'EOF'
 from flask import Flask, jsonify, request
 import psycopg2
 
 app = Flask(__name__)
 
 # Database connection details
-DB_HOST = "localhost"
-DB_NAME = "phonebook"
-DB_USER = "your_username"
-DB_PASSWORD = "your_password"
+DB_HOST = "${db_host}"
+DB_NAME = "${db_name}"
+DB_USER = "${username}"
+DB_PASSWORD = "${password}"
 
 # Create the database table if it doesn't exist
 conn = psycopg2.connect(
-    host=DB_HOST,
+    host=DB_HOST.split(":")[0],
     database=DB_NAME,
     user=DB_USER,
     password=DB_PASSWORD
@@ -48,6 +57,11 @@ conn.commit()
 conn.close()
 
 # API endpoints
+
+@app.route('/', methods=['GET'])
+def hello():
+    return jsonify({"welcome": "The phonebook api is running"}), 201
+
 @app.route('/phonebook', methods=['POST'])
 def create_entry():
     data = request.get_json()
@@ -128,8 +142,8 @@ def delete_entry(entry_id):
     return jsonify({'message': 'Entry deleted'}), 204
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 EOF
 
 # Start the API
-flask run --host=0.0.0.0
+python phonebook.py

@@ -83,10 +83,10 @@ autoscaling_groups = {
 autoscaling_attachments = {
   frontend = {
     autoscaling_group = "frontend"
-    lb_target_group      = "frontend"
+    lb_target_group   = "frontend"
   },
   backend = {
     autoscaling_group = "backend"
-    lb_target_group      = "backend"
+    lb_target_group   = "backend"
   },
 }

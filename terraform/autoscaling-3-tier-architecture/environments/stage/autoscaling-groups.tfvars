@@ -4,7 +4,7 @@ launch_templates = {
     image_id      = "ami-080e1f13689e07408"
     instance_type = "t2.micro"
     key_name      = "davidessien"
-    user_data     = "userdata/deploy-frontend.sh"
+    user_data     = "userdata/deploy-frontend.tpl"
 
     network_interfaces = {
       subnet_id       = "Frontend-1" # https://github.com/davidshare/AWS-Projects/blob/master/terraform/VPC-3-their-architecture/environments/stage/subnets.tfvars#L2C3-L2C14
@@ -23,11 +23,11 @@ launch_templates = {
     image_id      = "ami-080e1f13689e07408"
     instance_type = "t2.micro"
     key_name      = "davidessien"
-    user_data     = "userdata/deploy-backend.sh"
+    user_data     = "userdata/deploy-backend.tpl"
 
     network_interfaces = {
       subnet_id       = "Backend-1" # https://github.com/davidshare/AWS-Projects/blob/master/terraform/VPC-3-their-architecture/environments/stage/subnets.tfvars#L2C3-L2C14
-      security_groups = ["Frontend-Security-Group"]
+      security_groups = ["Backend-Security-Group"]
     }
 
     tag_specifications = {
@@ -83,10 +83,10 @@ autoscaling_groups = {
 autoscaling_attachments = {
   frontend = {
     autoscaling_group = "frontend"
-    lb_target_group      = "frontend"
+    lb_target_group   = "frontend"
   },
   backend = {
     autoscaling_group = "backend"
-    lb_target_group      = "backend"
+    lb_target_group   = "backend"
   },
 }

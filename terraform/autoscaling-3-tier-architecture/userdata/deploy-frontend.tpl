@@ -1,3 +1,18 @@
+#!/bin/bash
+
+# BACKEND_URL="${backend_nlb}"
+# echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< $BACKEND_URL >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+# Update system packages
+sudo apt-get update && sudo apt-get upgrade -y
+# Install Nginx
+sudo apt install -y nginx
+# Start Nginx service
+sudo systemctl start nginx
+# Enable Nginx to start on boot
+sudo systemctl enable nginx
+# Create an HTML file using a heredoc
+
+cat << 'EOF' > /var/www/html/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +81,7 @@
   </div>
 
   <script>
-    const API_URL = 'http://localhost:5000/phonebook';
+    const API_URL = '${BACKEND_URL}:5000/phonebook';
 
     // Add new entry
     const addForm = document.getElementById('add-form');
@@ -126,3 +141,4 @@
   </script>
 </body>
 </html>
+EOF

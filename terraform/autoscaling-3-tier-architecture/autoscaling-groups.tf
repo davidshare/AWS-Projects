@@ -1,6 +1,23 @@
 variable "launch_templates" {}
 variable "autoscaling_groups" {}
 variable "autoscaling_attachments" {}
+variable "launch_template_secrets" {}
+
+locals {
+  # Define user data for frontend and backend
+  user_data = {
+    frontend = base64encode(templatefile("${path.module}/userdata/deploy-frontend.tpl", {
+      backend_nlb = aws_lb.loadbalancers["backend"].dns_name
+    }))
+    
+    backend = base64encode(templatefile("${path.module}/userdata/deploy-backend.tpl", {
+      db_host  = aws_db_instance.db_instances["db_primary"].endpoint
+      db_name  = var.launch_template_secrets["backend"].db_name
+      username = var.launch_template_secrets["backend"].username
+      password = var.launch_template_secrets["backend"].password
+    }))
+  }
+}
 
 
 resource "aws_launch_template" "launch_templates" {
@@ -10,11 +27,11 @@ resource "aws_launch_template" "launch_templates" {
   image_id      = each.value.image_id
   instance_type = each.value.instance_type
   key_name      = each.value.key_name
-  user_data     = filebase64("${each.value.user_data}")
+  user_data     = local.user_data[each.key]
 
   network_interfaces {
     subnet_id       = local.subnet_ids_map[each.value.network_interfaces.subnet_id]
-    security_groups = [for sg in each.value.network_interfaces.security_groups : aws_security_group.frontend_security_group[sg].id]
+    security_groups = [for sg in each.value.network_interfaces.security_groups : aws_security_group.security_groups[sg].id]
   }
 
   tag_specifications {
@@ -42,7 +59,7 @@ resource "aws_autoscaling_group" "autoscaling_groups" {
   metrics_granularity       = each.value.metrics_granularity
 
   launch_template {
-    id = aws_launch_template.launch_templates[each.value.launch_template].id
+    id      = aws_launch_template.launch_templates[each.value.launch_template].id
     version = "$Latest"
   }
 
@@ -53,5 +70,5 @@ resource "aws_autoscaling_attachment" "autoscaling_attachment" {
   for_each = var.autoscaling_attachments
 
   autoscaling_group_name = aws_autoscaling_group.autoscaling_groups[each.value.autoscaling_group].id
-  lb_target_group_arn                    = aws_lb_target_group.lb_target_groups[each.value.lb_target_group].arn
+  lb_target_group_arn    = aws_lb_target_group.lb_target_groups[each.value.lb_target_group].arn
 }

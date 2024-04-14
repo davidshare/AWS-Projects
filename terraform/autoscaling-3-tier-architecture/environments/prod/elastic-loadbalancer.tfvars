@@ -3,7 +3,7 @@ albs = {
     name                       = "frontend"
     internal                   = false
     load_balancer_type         = "application"
-    security_groups            = ["ALB-Security-Group"]
+    security_groups            = ["Frontend-ALB-Security-Group"]
     subnets                    = ["Frontend-1", "Frontend-2"]
     enable_deletion_protection = false
 
@@ -15,7 +15,7 @@ albs = {
     name                       = "backend"
     internal                   = true
     load_balancer_type         = "application"
-    security_groups            = ["ALB-Security-Group"]
+    security_groups            = ["Frontend-ALB-Security-Group"]
     subnets                    = ["Backend-1", "Backend-2"]
     enable_deletion_protection = false
 
