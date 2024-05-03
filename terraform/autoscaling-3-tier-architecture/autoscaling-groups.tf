@@ -6,7 +6,11 @@ variable "launch_template_secrets" {}
 locals {
   # Define user data for frontend and backend
   user_data = {
-    frontend = base64encode(file("${path.module}/userdata/deploy-frontend.tpl"))
+    # frontend = base64encode(file("${path.module}/userdata/deploy-frontend.tpl"))
+    frontend = base64encode(templatefile("${path.module}/userdata/deploy-frontend.tpl", {
+      backend_nlb = aws_lb.loadbalancers["backend"].dns_name
+    }))
+
     
     backend = base64encode(templatefile("${path.module}/userdata/deploy-backend.tpl", {
       db_host  = aws_db_instance.db_instances["db_primary"].endpoint

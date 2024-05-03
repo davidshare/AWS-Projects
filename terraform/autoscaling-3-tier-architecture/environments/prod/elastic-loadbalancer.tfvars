@@ -1,4 +1,4 @@
-albs = {
+loadbalancers = {
   frontend = {
     name                       = "frontend"
     internal                   = false
@@ -14,8 +14,8 @@ albs = {
   backend = {
     name                       = "backend"
     internal                   = true
-    load_balancer_type         = "application"
-    security_groups            = ["Frontend-ALB-Security-Group"]
+    load_balancer_type         = "network"
+    security_groups            = ["Backend-NLB-Security-Group"]
     subnets                    = ["Backend-1", "Backend-2"]
     enable_deletion_protection = false
 
@@ -25,28 +25,37 @@ albs = {
   }
 }
 
-
 lb_target_groups = {
   frontend = {
     name     = "Frontend"
     port     = 80
     protocol = "HTTP"
-    vpc      = "main"
+    vpc      = "tersu"
 
     health_check = {
-      path    = "/"
-      matcher = 200
+      path                = "/"
+      protocol            = "HTTP"
+      matcher             = 200
+      interval            = 15
+      timeout             = 3
+      healthy_threshold   = 2
+      unhealthy_threshold = 2
     }
   },
   backend = {
     name     = "Backend"
     port     = 80
     protocol = "HTTP"
-    vpc      = "main"
+    vpc      = "tersu"
 
     health_check = {
-      path    = "/"
-      matcher = 200
+      path                = "/"
+      protocol            = "HTTP"
+      matcher             = 200
+      interval            = 15
+      timeout             = 3
+      healthy_threshold   = 2
+      unhealthy_threshold = 2
     }
   }
 }
@@ -58,10 +67,8 @@ alb_listeners = {
     protocol     = "HTTP"
 
     default_action = {
-      type        = "redirect"
-      port        = 443
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
+      type         = "forward"
+      target_group = "frontend"
     }
   },
   backend = {
@@ -70,10 +77,8 @@ alb_listeners = {
     protocol     = "HTTP"
 
     default_action = {
-      type        = "redirect"
-      port        = 443
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
+      type         = "forward"
+      target_group = "backend"
     }
   }
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# BACKEND_URL="${backend_nlb}"
-# echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< $BACKEND_URL >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+BACKEND_URL="$backend_nlb"
+echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< $${BACKEND_URL} >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 # Update system packages
 sudo apt-get update && sudo apt-get upgrade -y
 # Install Nginx
@@ -12,7 +12,7 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 # Create an HTML file using a heredoc
 
-cat << 'EOF' > /var/www/html/index.html
+cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,7 +81,7 @@ cat << 'EOF' > /var/www/html/index.html
   </div>
 
   <script>
-    const API_URL = '${BACKEND_URL}:5000/phonebook';
+    const API_URL = '$${BACKEND_URL}:5000/phonebook';
 
     // Add new entry
     const addForm = document.getElementById('add-form');
@@ -126,10 +126,10 @@ cat << 'EOF' > /var/www/html/index.html
       const entriesTable = document.getElementById('entries-table');
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td class="py-2 px-4 border-b">${entry.firstname}</td>
-        <td class="py-2 px-4 border-b">${entry.lastname}</td>
-        <td class="py-2 px-4 border-b">${entry.email}</td>
-        <td class="py-2 px-4 border-b">${entry.phone}</td>
+        <td class="py-2 px-4 border-b">$${entry.firstname}</td>
+        <td class="py-2 px-4 border-b">$${entry.lastname}</td>
+        <td class="py-2 px-4 border-b">$${entry.email}</td>
+        <td class="py-2 px-4 border-b">$${entry.phone}</td>
         <td class="py-2 px-4 border-b">
           <button class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded-md">Delete</button>
         </td>

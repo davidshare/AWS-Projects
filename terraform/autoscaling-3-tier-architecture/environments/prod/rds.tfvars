@@ -17,9 +17,6 @@ db_instances = {
     engine                  = "postgres"
     engine_version          = "14.11"
     instance_class          = "db.t3.micro"
-    db_name                 = "postgresdb"
-    username                = "username"
-    password                = "password"
     skip_final_snapshot     = true
     availability_zone       = "us-east-1b"
     db_subnet_group         = "primary_db"
@@ -34,6 +31,7 @@ db_instances = {
 
 replica_db_instances = {
   db_primary_replica = {
+    identifier              = "primary-replica"
     instance_class          = "db.t3.micro"
     skip_final_snapshot     = true
     backup_retention_period = 7

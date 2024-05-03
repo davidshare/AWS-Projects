@@ -18,7 +18,7 @@ The project is structured to support different environments, such as production 
 ```
 .
 ├── autoscaling-groups.tf
-├── database.tf
+├── davidessien
 ├── dynamodb.tf
 ├── ec2-ssh.tf
 ├── elastic-loadbalancer.tf
@@ -30,7 +30,11 @@ The project is structured to support different environments, such as production 
 │   │   ├── ec2-ssh.tfvars
 │   │   ├── elastic-loadbalancer.tfvars
 │   │   ├── main.tfvars
+│   │   ├── rds.tfvars
 │   │   ├── s3.tfvars
+│   │   ├── secrets.tfvars
+│   │   ├── security-groups.tfvars
+│   │   ├── subnets.tfvars
 │   │   └── terraform.tfvars
 │   └── stage
 │       ├── autoscaling-groups.tfvars
@@ -39,18 +43,26 @@ The project is structured to support different environments, such as production 
 │       ├── ec2-ssh.tfvars
 │       ├── elastic-loadbalancer.tfvars
 │       ├── main.tfvars
+│       ├── rds.tfvars
 │       ├── s3.tfvars
+│       ├── secrets.tfvars
+│       ├── security-groups.tfvars
+│       ├── subnets.tfvars
 │       └── terraform.tfvars
-├── files
-│   ├── deploy-backend.sh
-│   └── deploy-frontend.sh
 ├── main.tf
 ├── output.tf
 ├── provider.tf
+├── rds.tf
 ├── README.md
 ├── s3.tf
 ├── security-groups.tf
-└── terraform.sh
+├── subnets.data.tf
+├── terraform.sh
+├── userdata
+│   ├── deploy-backend.tpl
+│   ├── deploy-frontend.tpl
+│   └── index.html
+└── vpc.data.tf
 ```
 
 The project directory structure is organized as follows:
@@ -66,16 +78,21 @@ The project directory structure is organized as follows:
   - **s3.tf**: Terraform configuration file for creating S3 buckets.
   - **security-groups.tf**: Terraform configuration file for defining security groups.
   - **output.tf**: Terraform configuration file for defining output variables.
+  - **rds.tf**: Terraform configuration file for defining output variables.
   - **terraform.sh**: Shell script for initializing and applying Terraform configurations.
   - **environments**: Directory containing environment-specific configurations.
     - **prod**: Subdirectory for production environment configurations.
-      - **main.tfvars**: The values file for production environment.
       - **autoscaling-groups.tfvars**: The values file for Autoscaling Groups configuration in production environment.
+      - **main.tfvars**: The values file for production environment.
       - **elastic-loadbalancer.tfvars**: The values file for Elastic Load Balancers configuration in production environment.
       - **ec2-ssh.tfvars**: The values file for EC2 instance configuration in production environment.
       - **dynamodb.tfvars**: the values file for DynamoDB configuration in production environment.
-      - **s3.tfvars**: The values file for S3 configuration in production environment.
       - **backend-s3.hcl**: HCL configuration file for Terraform remote backend in production environment.
+      - **s3.tfvars**: The values file for S3 configuration in production environment.
+      - **rds.tfvars**: Values files for RDS instances.
+      - **secrets.tfvars**: Values files for secrets like database credentials.
+      - **security-groups.tfvars**: Values files for the security groups.
+      - **subnets.tfvars**: Values files for subnet values.
     - **stage**: Subdirectory for staging environment configurations (similar structure to prod).
   - **files**: Directory containing scripts for deploying the frontend and backend applications.
 
@@ -92,6 +109,7 @@ The project directory structure is organized as follows:
 * Terraform installation - [steps](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 * AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
 * Environment Variables for AWS CLI - [steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
+* An AWS VPC with architecture that supports this deployment, found [here](https://github.com/davidshare/AWS-Projects/tree/master/terraform/VPC-3-their-architecture)
 
 ## Requirements
 | Name          | Version       |
@@ -149,16 +167,17 @@ Replace `<environment>` with the name of the environment you want to deploy (e.g
 | ------------- |:-------------:|
 | [aws_launch_template](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
 | [aws_autoscaling_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
+| [aws_autoscaling_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_attachment) | resource |
+| [aws_dynamodb_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
+| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
 | [aws_lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb) | resource |
 | [aws_lb_target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
-| [aws_autoscaling_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_attachment) | resource |
 | [aws_lb_listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
-| [aws_dynamodb_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table) | resource |
+| [aws_autoscaling_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_attachment) | resource |
 | [aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
 | [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) | resource |
 | [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
+| [aws_db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) | resource |
 
 ## Contributors
 [David Essien](https://github.com/davidshare) - Maintainer
