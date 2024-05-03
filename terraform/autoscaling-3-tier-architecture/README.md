@@ -1,6 +1,6 @@
 # Terraform Project: 3-tier architecture with autoscaling group and loadbalancing
 ## Architecture Overview
-![image Architecture diagram for AWS 3-tier architecture with Autoscaling](../../images/AWS%203-tier%20architecture%20with%20Autoscaling.svg)
+![image Architecture diagram for AWS 3-tier architecture with Autoscaling](./AWS%203-tier%20autoscaling%20architecture.svg)
 
 This Terraform project is designed to deploy a 3-tier architecture with Autoscaling on AWS using infrastructure-as-code principles. The architecture includes:
 
