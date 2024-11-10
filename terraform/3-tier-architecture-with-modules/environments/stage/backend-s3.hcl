@@ -1,5 +1,4 @@
-    bucket         = "terraform-state-stage"
+    bucket         = "tersu-terraform-state-stage"
     key            = "stage/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "dynamodb-lock-table-stage"
-    encrypt        = true
+    dynamodb_table = "tersu-infrastructure-state-lock-stage"
