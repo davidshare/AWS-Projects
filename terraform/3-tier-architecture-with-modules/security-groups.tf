@@ -1,9 +1,9 @@
 variable "security_groups" {
   description = "Map of Security Groups with their configuration"
   type = map(object({
-    name        = string
-    description = string
-    vpc_name      = string
+    name                   = string
+    description            = string
+    vpc_name               = string
     revoke_rules_on_delete = bool
     tags                   = map(string)
   }))
