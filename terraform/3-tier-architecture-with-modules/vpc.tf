@@ -18,5 +18,5 @@ module "vpc" {
   enable_dns_hostnames             = each.value.enable_dns_hostnames
   assign_generated_ipv6_cidr_block = each.value.assign_generated_ipv6_cidr_block
 
-  tags = each.value.tags
+  tags = merge(each.value.tags, local.tags)
 }

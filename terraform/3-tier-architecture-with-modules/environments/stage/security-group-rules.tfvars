@@ -90,7 +90,7 @@ egress_rules = [
     cidr_ipv6                    = ""
     prefix_list_ids              = ""
     tags = {
-      "Name"        = "Database-SG-Egress"
+      "Name" = "Database-SG-Egress"
     }
   },
 
@@ -106,7 +106,7 @@ egress_rules = [
     cidr_ipv6                    = ""
     prefix_list_ids              = ""
     tags = {
-      "Name"        = "Backend-SG-Egress"
+      "Name" = "Backend-SG-Egress"
     }
   },
 
@@ -122,7 +122,7 @@ egress_rules = [
     cidr_ipv6                    = ""
     prefix_list_ids              = ""
     tags = {
-      "Name"        = "Web-SG-Egress"
+      "Name" = "Web-SG-Egress"
     }
   }
 ]

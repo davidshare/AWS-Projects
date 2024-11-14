@@ -18,5 +18,5 @@ module "security_group" {
   description            = each.value.description
   vpc_id                 = module.vpc[each.value.vpc_name].vpc_id
   revoke_rules_on_delete = each.value.revoke_rules_on_delete
-  tags                   = each.value.tags
+  tags                   = merge(each.value.tags, local.tags)
 }

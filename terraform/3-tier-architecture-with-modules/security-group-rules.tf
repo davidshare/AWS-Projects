@@ -40,7 +40,7 @@ module "vpc_security_group_ingress_rule" {
   to_port           = var.ingress_rules[count.index].to_port
   ip_protocol       = var.ingress_rules[count.index].protocol
   description       = try(var.ingress_rules[count.index].description, null)
-  tags              = var.ingress_rules[count.index].tags
+  tags              = merge(var.ingress_rules[count.index].tags, local.tags)
 
   cidr_ipv4                    = var.ingress_rules[count.index].cidr_ipv4
   cidr_ipv6                    = var.ingress_rules[count.index].cidr_ipv6
@@ -60,7 +60,7 @@ module "vpc_security_group_egress_rule" {
   to_port           = var.egress_rules[count.index].to_port
   ip_protocol       = var.egress_rules[count.index].protocol
   description       = try(var.egress_rules[count.index].description, null)
-  tags              = var.egress_rules[count.index].tags
+  tags              = merge(var.egress_rules[count.index].tags, local.tags)
 
   cidr_ipv4                    = var.egress_rules[count.index].cidr_ipv4
   cidr_ipv6                    = var.egress_rules[count.index].cidr_ipv6
