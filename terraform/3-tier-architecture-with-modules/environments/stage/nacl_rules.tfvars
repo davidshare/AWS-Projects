@@ -30,6 +30,16 @@ network_acl_rules = {
     rule_action = "allow"
     egress      = false
   },
+  web_outbound_to_backend = {
+    network_acl = "primary_public"
+    rule_number = 200
+    protocol    = "tcp"
+    from_port   = 1024
+    to_port     = 65535
+    cidr_block  = "10.0.3.0/24,10.0.4.0/24"  # Backend subnet CIDR blocks
+    rule_action = "allow"
+    egress      = true
+  },
 
   # Backend Tier NACL Rules
   backend_primary_from_web = {
@@ -52,6 +62,16 @@ network_acl_rules = {
     rule_action = "allow"
     egress      = false
   },
+  backend_outbound_to_web = {
+    network_acl = "primary_backend_private"
+    rule_number = 200
+    protocol    = "tcp"
+    from_port   = 8080
+    to_port     = 8080
+    cidr_block  = "10.0.1.0/24,10.0.2.0/24"  # Web subnet CIDR blocks
+    rule_action = "allow"
+    egress      = true
+  },
 
   # Database Tier NACL Rules
   database_primary_from_backend = {
@@ -63,5 +83,15 @@ network_acl_rules = {
     cidr_block  = "0.0.0.0/0"
     rule_action = "allow"
     egress      = false
+  },
+  database_outbound_to_backend = {
+    network_acl = "primary_db_private"
+    rule_number = 200
+    protocol    = "tcp"
+    from_port   = 1024
+    to_port     = 65535
+    cidr_block  = "10.0.3.0/24,10.0.4.0/24"  # Backend subnet CIDR blocks
+    rule_action = "allow"
+    egress      = true
   }
 }

@@ -5,8 +5,7 @@ subnets = {
     public            = true
     vpc_name          = "main"
     tags = {
-      Name        = "PrimaryPublicSubnet1"
-      Environment = "Production"
+      Name = "PrimaryPublicSubnet1"
     }
   },
   "primary_public_2" = {
@@ -15,8 +14,7 @@ subnets = {
     public            = true
     vpc_name          = "main"
     tags = {
-      Name        = "PrimaryPublicSubnet2"
-      Environment = "Production"
+      Name = "PrimaryPublicSubnet2"
     }
   },
   "primary_backend_private_1" = {
@@ -25,8 +23,7 @@ subnets = {
     public            = false
     vpc_name          = "main"
     tags = {
-      Name        = "PrimaryBackendPrivateSubnet1"
-      Environment = "Production"
+      Name = "PrimaryBackendPrivateSubnet1"
     }
   },
   "primary_backend_private_2" = {
@@ -35,8 +32,7 @@ subnets = {
     public            = false
     vpc_name          = "main"
     tags = {
-      Name        = "PrimaryBackendPrivateSubnet2"
-      Environment = "Production"
+      Name = "PrimaryBackendPrivateSubnet2"
     }
   },
   "primary_db_private_1" = {
@@ -45,8 +41,7 @@ subnets = {
     public            = false
     vpc_name          = "main"
     tags = {
-      Name        = "PrimaryDBPrivateSubnet1"
-      Environment = "Production"
+      Name = "PrimaryDBPrivateSubnet1"
     }
   },
   "primary_db_private_2" = {
@@ -55,8 +50,7 @@ subnets = {
     public            = false
     vpc_name          = "main"
     tags = {
-      Name        = "PrimaryDBPrivateSubnet2"
-      Environment = "Production"
+      Name = "PrimaryDBPrivateSubnet2"
     }
   }
 }

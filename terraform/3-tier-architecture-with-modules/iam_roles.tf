@@ -14,9 +14,9 @@ variable "roles" {
         Action = string
       }))
     })
-    max_session_duration = number
+    max_session_duration  = number
     force_detach_policies = bool
-    tags = map(string)
+    tags                  = map(string)
   }))
 }
 

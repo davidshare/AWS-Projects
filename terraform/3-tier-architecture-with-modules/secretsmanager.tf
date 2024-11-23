@@ -1,0 +1,40 @@
+variable "secretsmanager_secrets" {
+  description = "Map of Secrets Manager Secret configurations for storing secret metadata"
+  type = map(object({
+    name        = string
+    description = string
+    tags        = map(string)
+  }))
+}
+
+variable "secretsmanager_secret_versions" {
+  description = "Map of Secrets Manager Secret Version configurations for storing secret values"
+  type = map(object({
+    secret         = string
+    secret_string  = map(string)
+    version_stages = list(string)
+  }))
+}
+
+
+
+module "secretsmanager_secrets" {
+  for_each = var.secretsmanager_secrets
+
+  source = "../../../terraform-aws-modules/secretsmanager_secret"
+
+  name        = each.value.name
+  description = each.value.description
+  tags        = each.value.tags
+}
+
+module "secretsmanager_secret_versions" {
+  for_each = var.secretsmanager_secret_versions
+
+  source = "../../../terraform-aws-modules/secretsmanager_secret_version"
+
+  secret_id      = module.secretsmanager_secrets[each.value.secret].arn
+  secret_string  = jsonencode(each.value.secret_string)
+  version_stages = each.value.version_stages
+}
+

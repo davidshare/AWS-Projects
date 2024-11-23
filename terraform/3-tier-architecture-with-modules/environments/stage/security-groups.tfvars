@@ -6,8 +6,7 @@ security_groups = {
     vpc_name               = "main"
     revoke_rules_on_delete = true
     tags = {
-      Name        = "WebSG"
-      Environment = "Production"
+      Name = "WebSG"
     }
   },
   "backend" = {
@@ -17,8 +16,7 @@ security_groups = {
     vpc_name               = "main"
     revoke_rules_on_delete = true
     tags = {
-      Name        = "BackendSG"
-      Environment = "Production"
+      Name = "BackendSG"
     }
   },
   "database" = {
@@ -28,8 +26,7 @@ security_groups = {
     vpc_name               = "main"
     revoke_rules_on_delete = true
     tags = {
-      Name        = "DbSG"
-      Environment = "Production"
+      Name = "DbSG"
     }
   }
 }

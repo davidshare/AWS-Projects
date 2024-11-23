@@ -16,5 +16,5 @@ module "db_subnet_groups" {
   name        = each.value.name
   description = each.value.description
   subnet_ids  = each.value.subnets
-  tags        = each.value.tags
+  tags        = merge(each.value.tags, local.tags)
 }

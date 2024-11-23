@@ -41,23 +41,8 @@ module "launch_templates" {
   tag_specifications   = each.value.tag_specifications
   metadata_options     = each.value.metadata_options
 
-  tags = {
-    Name = "${each.key}-launch-template"
-    Tier = each.key
-  }
-}
-
-
-output "launch_template_ids" {
-  description = "IDs of the created launch templates"
-  value = {
-    for k, v in module.launch_templates : k => v.id
-  }
-}
-
-output "launch_template_latest_versions" {
-  description = "Latest versions of the created launch templates"
-  value = {
-    for k, v in module.launch_templates : k => v.latest_version
-  }
+  tags = merge(
+    local.tags,
+    { for ts in each.value.tag_specifications : ts.resource_type => ts.tags }["instance"]
+  )
 }

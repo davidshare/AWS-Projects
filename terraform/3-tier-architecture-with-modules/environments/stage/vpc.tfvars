@@ -4,8 +4,7 @@ vpcs = {
     enable_dns_hostnames             = true
     assign_generated_ipv6_cidr_block = true
     tags = {
-      Name        = "MyVPC"
-      Environment = "Production"
+      Name = "MyVPC"
     }
   },
   "secondary" = {
@@ -13,8 +12,7 @@ vpcs = {
     enable_dns_hostnames             = false
     assign_generated_ipv6_cidr_block = true
     tags = {
-      Name        = "SecondaryVPC"
-      Environment = "Staging"
+      Name = "SecondaryVPC"
     }
   }
 }

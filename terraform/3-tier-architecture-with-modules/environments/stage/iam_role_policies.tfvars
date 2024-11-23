@@ -1,7 +1,7 @@
 role_policies = {
   "web" = {
-    name        = "web-policy"
-    role        = "web-instances-role"
+    name = "web-policy"
+    role = "web-instances-role"
     policy = {
       Version = "2012-10-17"
       Statement = [
@@ -20,8 +20,8 @@ role_policies = {
   },
 
   "backend" = {
-    name        = "backend-policy"
-    role        = "backend-instances-role"
+    name = "backend-policy"
+    role = "backend-instances-role"
     policy = {
       Version = "2012-10-17"
       Statement = [
