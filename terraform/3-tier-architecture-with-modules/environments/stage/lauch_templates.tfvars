@@ -1,7 +1,7 @@
 launch_template_configs = {
   frontend = {
     name          = "frontend"
-    instance_type = "t3.micro"              # Free Tier eligible
+    instance_type = "t2.micro"              # Free Tier eligible
     image_id      = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (adjust as needed)
     user_data     = <<-EOF
                     #!/bin/bash
@@ -54,7 +54,7 @@ launch_template_configs = {
   },
   backend = {
     name          = "backend"
-    instance_type = "t3.micro"              # Free Tier eligible
+    instance_type = "t2.micro"              # Free Tier eligible
     image_id      = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (adjust as needed)
     user_data     = <<-EOF
                     #!/bin/bash

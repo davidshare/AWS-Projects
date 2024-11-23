@@ -176,7 +176,7 @@ cd `terraform/3-tier-architecture-with-modules`
 
 - **Auto Scaling Groups**: For web and application tiers
 - **Launch Templates**: Defines the configuration for EC2 instances
-- **EC2 Instances**: t3.micro instances for cost-effectiveness
+- **EC2 Instances**: t2.micro instances for cost-effectiveness
 
 ### Database
 
