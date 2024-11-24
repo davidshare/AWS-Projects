@@ -39,6 +39,6 @@ module "db_instances" {
   db_subnet_group_name         = each.value.db_subnet_group != null ? module.db_subnet_groups[each.value.db_subnet_group].name : null
   manage_master_user_password  = each.value.manage_master_user_password
   performance_insights_enabled = each.value.performance_insights_enabled
-  vpc_security_group_ids       = [for sg in each.value.vpc_security_groups : module.security_group[sg].security_group_id]
+  vpc_security_group_ids       = [for sg in each.value.vpc_security_groups : module.security_group[sg].id]
   tags                         = merge(each.value.tags, local.tags)
 }

@@ -36,7 +36,7 @@ module "lb_target_group" {
   name               = each.value.name
   protocol           = each.value.protocol
   port               = each.value.port
-  vpc_id             = module.vpc[each.value.vpc].vpc_id
+  vpc_id             = module.vpc[each.value.vpc].id
   target_type        = each.value.target_type
   preserve_client_ip = each.value.preserve_client_ip
 

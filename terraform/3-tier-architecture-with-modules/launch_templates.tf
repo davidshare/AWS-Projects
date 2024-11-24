@@ -31,7 +31,7 @@ module "launch_templates" {
     for ni in each.value.network_interfaces : {
       associate_public_ip_address = ni.associate_public_ip_address
       security_groups = [
-        for sg in ni.security_groups : module.security_group[sg].security_group_id
+        for sg in ni.security_groups : module.security_group[sg].id
       ]
     }
   ]

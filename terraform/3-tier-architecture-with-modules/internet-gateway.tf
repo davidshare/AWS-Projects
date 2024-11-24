@@ -10,6 +10,6 @@ module "internet_gateway" {
   for_each = var.internet_gateways
   source   = "../../../terraform-aws-modules/internet_gateway"
 
-  vpc_id = module.vpc[each.value.vpc].vpc_id
+  vpc_id = module.vpc[each.value.vpc].id
   tags   = merge(each.value.tags, local.tags)
 }

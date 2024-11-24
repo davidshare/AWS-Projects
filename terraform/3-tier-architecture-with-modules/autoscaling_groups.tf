@@ -28,7 +28,7 @@ module "autoscaling_group" {
   max_size                  = each.value.max_size
   min_size                  = each.value.min_size
   desired_capacity          = each.value.desired_capacity
-  vpc_zone_identifier       = [for subnet in each.value.vpc_zone_identifier : module.subnet[subnet].subnet_id]
+  vpc_zone_identifier       = [for subnet in each.value.vpc_zone_identifier : module.subnets[subnet].id]
   health_check_type         = each.value.health_check_type
   health_check_grace_period = each.value.health_check_grace_period
 

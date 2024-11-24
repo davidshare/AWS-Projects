@@ -12,7 +12,7 @@ variable "vpcs" {
 module "vpc" {
   for_each = var.vpcs
 
-  source = "github.com/davidshare/terraform-aws-modules//vpc?ref=vpc-v1.0.7"
+  source = "../../../terraform-aws-modules/vpc"
 
   cidr_block                       = each.value.cidr_block
   enable_dns_hostnames             = each.value.enable_dns_hostnames

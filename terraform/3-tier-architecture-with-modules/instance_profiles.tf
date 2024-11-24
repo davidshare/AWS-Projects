@@ -14,6 +14,6 @@ module "instance_profile" {
   source = "../../../terraform-aws-modules/iam_instance_profile"
 
   name = each.value.name
-  role = module.roles[each.value.role].iam_role_name
+  role = module.roles[each.value.role].name
   tags = merge(each.value.tags, local.tags)
 }

@@ -8,7 +8,7 @@ locals {
         module.autoscaling_policy["frontend_scale_up"].arn
       ]
       dimensions = {
-        AutoScalingGroupName = module.autoscaling_group["frontend_asg"].autoscaling_group_arn
+        AutoScalingGroupName = module.autoscaling_group["frontend_asg"].arn
       }
     }
 
@@ -20,7 +20,7 @@ locals {
         module.autoscaling_policy["frontend_scale_down"].arn
       ]
       dimensions = {
-        AutoScalingGroupName = module.autoscaling_group["frontend_asg"].autoscaling_group_arn
+        AutoScalingGroupName = module.autoscaling_group["frontend_asg"].arn
       }
     }
 

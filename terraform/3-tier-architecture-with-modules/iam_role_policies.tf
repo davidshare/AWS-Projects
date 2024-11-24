@@ -20,6 +20,6 @@ module "role_policies" {
   source = "../../../terraform-aws-modules/iam_role_policy"
 
   name   = each.value.name
-  role   = module.roles[each.value.role].iam_role_name
+  role   = module.roles[each.value.role].name
   policy = jsonencode(each.value.policy)
 }

@@ -42,7 +42,7 @@ module "route_table" {
 
   source = "../../../terraform-aws-modules/route_table"
 
-  vpc_id = module.vpc[each.value.vpc].vpc_id
+  vpc_id = module.vpc[each.value.vpc].id
   tags   = merge(each.value.tags, local.tags)
 }
 
@@ -52,10 +52,10 @@ module "subnets_route_table_associations" {
 
   source = "../../../terraform-aws-modules/route_table_association"
 
-  subnet_id      = module.subnet[each.value.subnet].subnet_id
-  route_table_id = module.route_table[each.value.route_table].route_table_id
+  subnet_id      = module.subnets[each.value.subnet].id
+  route_table_id = module.route_table[each.value.route_table].id
 
-  depends_on = [module.subnet, module.route_table]
+  depends_on = [module.subnets, module.route_table]
 }
 
 # Routes for Internet Gateway
@@ -64,9 +64,9 @@ module "internet_gateway_routes" {
 
   source = "../../../terraform-aws-modules/route"
 
-  route_table_id         = module.route_table[each.value.route_table].route_table_id
+  route_table_id         = module.route_table[each.value.route_table].id
   destination_cidr_block = each.value.cidr
-  gateway_id             = module.internet_gateway[each.value.gateway].internet_gateway_id
+  gateway_id             = module.internet_gateway[each.value.gateway].id
 
   depends_on = [module.internet_gateway, module.route_table]
 }
@@ -77,9 +77,9 @@ module "nat_gateway_routes" {
 
   source = "../../../terraform-aws-modules/route"
 
-  route_table_id         = module.route_table[each.value.route_table].route_table_id
+  route_table_id         = module.route_table[each.value.route_table].id
   destination_cidr_block = each.value.cidr
-  nat_gateway_id         = module.nat_gateway[each.value.gateway].nat_gateway_id
+  nat_gateway_id         = module.nat_gateway[each.value.gateway].id
 
   depends_on = [module.nat_gateway, module.route_table]
 }

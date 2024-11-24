@@ -32,7 +32,7 @@ module "autoscaling_policy" {
   source = "../../../terraform-aws-modules/autoscaling_policy"
 
   name                          = each.value.name
-  autoscaling_group_name        = module.autoscaling_group[each.value.autoscaling_group].autoscaling_group_name
+  autoscaling_group_name        = module.autoscaling_group[each.value.autoscaling_group].name
   policy_type                   = each.value.policy_type
   adjustment_type               = each.value.adjustment_type
   scaling_adjustment            = each.value.scaling_adjustment

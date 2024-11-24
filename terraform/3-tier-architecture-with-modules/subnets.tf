@@ -10,12 +10,12 @@ variable "subnets" {
 }
 
 # Module call for subnets
-module "subnet" {
+module "subnets" {
   for_each = var.subnets
 
-  source = "../../../terraform-aws-modules/subnets/"
+  source = "../../../terraform-aws-modules/subnet/"
 
-  vpc_id                  = module.vpc[each.value.vpc_name].vpc_id
+  vpc_id                  = module.vpc[each.value.vpc_name].id
   cidr_block              = each.value.cidr_block
   availability_zone       = each.value.availability_zone
   map_public_ip_on_launch = each.value.public

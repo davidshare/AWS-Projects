@@ -12,11 +12,11 @@ variable "security_groups" {
 module "security_group" {
   for_each = var.security_groups
 
-  source = "github.com/davidshare/terraform-aws-modules//security_group?ref=security_group-v1.0.0"
+  source = "../../../terraform-aws-modules/security_group"
 
   name                   = each.value.name
   description            = each.value.description
-  vpc_id                 = module.vpc[each.value.vpc_name].vpc_id
+  vpc_id                 = module.vpc[each.value.vpc_name].id
   revoke_rules_on_delete = each.value.revoke_rules_on_delete
   tags                   = merge(each.value.tags, local.tags)
 }
