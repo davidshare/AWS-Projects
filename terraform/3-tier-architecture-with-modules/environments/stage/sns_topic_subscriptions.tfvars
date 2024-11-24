@@ -34,10 +34,8 @@ sns_topic_subscriptions = {
         numMaxDelayRetries = 1
       }
     }
-    raw_message_delivery = true
-    redrive_policy = {
-      deadLetterTargetArn = null
-    }
+    raw_message_delivery  = false
+    redrive_policy        = null
     subscription_role_arn = null
   }
 }

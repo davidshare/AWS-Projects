@@ -6,14 +6,6 @@ secretsmanager_secrets = {
       Role = "primary"
     }
   }
-
-  replica_db_secret = {
-    name        = "replica-db-secret"
-    description = "Secret for the replica MySQL instance credentials"
-    tags = {
-      Role = "replica"
-    }
-  }
 }
 
 secretsmanager_secret_versions = {

@@ -31,6 +31,5 @@ module "sns_topic_subscription" {
   filter_policy         = jsonencode(each.value.filter_policy)
   delivery_policy       = jsonencode(each.value.delivery_policy)
   raw_message_delivery  = each.value.raw_message_delivery
-  redrive_policy        = jsonencode(each.value.redrive_policy)
   subscription_role_arn = each.value.subscription_role_arn
 }

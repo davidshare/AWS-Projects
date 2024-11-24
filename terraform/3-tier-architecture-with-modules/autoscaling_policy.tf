@@ -4,24 +4,26 @@ variable "autoscaling_group_policies" {
     name                      = string
     autoscaling_group         = string
     policy_type               = string
-    adjustment_type           = string
-    scaling_adjustment        = number
-    cooldown                  = number
-    estimated_instance_warmup = number
-    metric_aggregation_type   = string
-    min_adjustment_magnitude  = number
-    target_tracking_configuration = object({
-      predefined_metric_type = string
-      resource_label         = string
-      target_value           = number
-    })
-    step_adjustments = list(object({
+    adjustment_type           = optional(string) # Allow null values
+    scaling_adjustment        = optional(number) # Allow null values
+    cooldown                  = optional(number) # Allow null values
+    estimated_instance_warmup = optional(number) # Allow null values
+    metric_aggregation_type   = optional(string) # Allow null values
+    min_adjustment_magnitude  = optional(number) # Allow null values
+    target_tracking_configuration = optional(object({
+      predefined_metric_specification = optional(object({
+        predefined_metric_type = string
+      }))
+      target_value = number
+    })) # Allow null values
+    step_adjustments = optional(list(object({
       metric_interval_lower_bound = number
-      metric_interval_upper_bound = number
+      metric_interval_upper_bound = optional(number) # Allow null values
       scaling_adjustment          = number
-    }))
+    }))) # Allow null values
   }))
 }
+
 
 
 module "autoscaling_policy" {

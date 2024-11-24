@@ -1,4 +1,49 @@
 ingress_rules = [
+  # Frontend Load Balancer Security Group Rules
+  {
+    security_group_id            = "frontend_lb"
+    description                  = "Allow HTTP from anywhere"
+    from_port                    = 80
+    to_port                      = 80
+    protocol                     = "tcp"
+    referenced_security_group_id = ""
+    cidr_ipv4                    = "0.0.0.0/0"
+    cidr_ipv6                    = ""
+    prefix_list_ids              = ""
+    tags = {
+      "Name" = "Frontend LB HTTP Ingress"
+    }
+  },
+  {
+    security_group_id            = "frontend_lb"
+    description                  = "Allow HTTPS from anywhere"
+    from_port                    = 443
+    to_port                      = 443
+    protocol                     = "tcp"
+    referenced_security_group_id = ""
+    cidr_ipv4                    = "0.0.0.0/0"
+    cidr_ipv6                    = ""
+    prefix_list_ids              = ""
+    tags = {
+      "Name" = "Frontend LB HTTPS Ingress"
+    }
+  },
+
+  # Backend Load Balancer Security Group Rules
+  {
+    security_group_id            = "backend_lb"
+    description                  = "Allow traffic from web tier"
+    from_port                    = 80
+    to_port                      = 80
+    protocol                     = "tcp"
+    referenced_security_group_id = "web"
+    cidr_ipv4                    = ""
+    cidr_ipv6                    = ""
+    prefix_list_ids              = ""
+    tags = {
+      "Name" = "Backend LB Web Tier Ingress"
+    }
+  },
   # Database Security Group Rules
   {
     security_group_id            = "database"
@@ -29,35 +74,33 @@ ingress_rules = [
     }
   },
 
-  # Backend Security Group Rules
   {
     security_group_id            = "backend"
-    description                  = "Allow access from web servers"
+    description                  = "Allow traffic from backend load balancer"
     from_port                    = 8080
     to_port                      = 8080
     protocol                     = "tcp"
-    referenced_security_group_id = "web"
+    referenced_security_group_id = "backend_lb"
     cidr_ipv4                    = ""
     cidr_ipv6                    = ""
     prefix_list_ids              = ""
     tags = {
-      "Name" = "Backend Ingress Rule"
+      "Name" = "Backend from Backend LB Ingress"
     }
   },
 
-  # Web Security Group Rules
   {
     security_group_id            = "web"
-    description                  = "Allow HTTP access from anywhere"
+    description                  = "Allow traffic from frontend load balancer"
     from_port                    = 80
     to_port                      = 80
     protocol                     = "tcp"
-    referenced_security_group_id = ""
-    cidr_ipv4                    = "0.0.0.0/0"
+    referenced_security_group_id = "frontend_lb"
+    cidr_ipv4                    = ""
     cidr_ipv6                    = ""
     prefix_list_ids              = ""
     tags = {
-      "Name" = "Web Ingress Rule HTTP"
+      "Name" = "Web from Frontend LB Ingress"
     }
   },
   {
@@ -78,7 +121,6 @@ ingress_rules = [
 
 # Egress Rules
 egress_rules = [
-  # Database Security Group Egress Rule
   {
     security_group_id            = "database"
     description                  = "Allow outbound traffic"
@@ -94,7 +136,6 @@ egress_rules = [
     }
   },
 
-  # Backend Security Group Egress Rule
   {
     security_group_id            = "backend"
     description                  = "Allow outbound traffic"
@@ -110,7 +151,6 @@ egress_rules = [
     }
   },
 
-  # Web Security Group Egress Rule
   {
     security_group_id            = "web"
     description                  = "Allow outbound traffic"
@@ -123,6 +163,36 @@ egress_rules = [
     prefix_list_ids              = ""
     tags = {
       "Name" = "Web-SG-Egress"
+    }
+  },
+
+  {
+    security_group_id            = "frontend_lb"
+    description                  = "Allow outbound traffic to web tier"
+    from_port                    = 80
+    to_port                      = 80
+    protocol                     = "tcp"
+    referenced_security_group_id = "web"
+    cidr_ipv4                    = ""
+    cidr_ipv6                    = ""
+    prefix_list_ids              = ""
+    tags = {
+      "Name" = "Frontend-LB-to-Web-Egress"
+    }
+  },
+
+  {
+    security_group_id            = "backend_lb"
+    description                  = "Allow outbound traffic to backend tier"
+    from_port                    = 8080
+    to_port                      = 8080
+    protocol                     = "tcp"
+    referenced_security_group_id = "backend"
+    cidr_ipv4                    = ""
+    cidr_ipv6                    = ""
+    prefix_list_ids              = ""
+    tags = {
+      "Name" = "Backend-LB-to-Backend-Egress"
     }
   }
 ]

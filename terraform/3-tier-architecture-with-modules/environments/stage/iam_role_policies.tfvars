@@ -32,7 +32,7 @@ role_policies = {
         },
         {
           Effect   = "Allow"
-          Action   = ["rds:DescribeDBInstances", "rds:Connect"]
+          Action   = ["rds:DescribeDBInstances", "rds-db:connect"]
           Resource = ["arn:aws:rds:us-east-1:*:db:mysql-db-instance"]
         },
         {

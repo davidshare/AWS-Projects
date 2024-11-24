@@ -28,11 +28,11 @@ db_parameter_groups = {
     parameters = [
       {
         name  = "work_mem"
-        value = "4MB"
+        value = "4096"
       },
       {
         name  = "maintenance_work_mem"
-        value = "64MB"
+        value = "4096"
       },
       {
         name  = "max_parallel_workers"

@@ -1,11 +1,12 @@
 variable "lb_target_groups" {
   description = "Configuration for Load Balancer Target Groups"
   type = map(object({
-    name        = string
-    protocol    = string
-    port        = number
-    vpc_id      = string
-    target_type = string
+    name               = string
+    protocol           = string
+    port               = number
+    vpc                = string
+    target_type        = string
+    preserve_client_ip = bool
     health_check = object({
       enabled             = bool
       protocol            = string
@@ -32,11 +33,12 @@ module "lb_target_group" {
 
   source = "../../../terraform-aws-modules/lb_target_group"
 
-  name        = each.value.name
-  protocol    = each.value.protocol
-  port        = each.value.port
-  vpc_id      = each.value.vpc_id
-  target_type = each.value.target_type
+  name               = each.value.name
+  protocol           = each.value.protocol
+  port               = each.value.port
+  vpc_id             = module.vpc[each.value.vpc].vpc_id
+  target_type        = each.value.target_type
+  preserve_client_ip = each.value.preserve_client_ip
 
   health_check = {
     enabled             = each.value.health_check.enabled

@@ -2,7 +2,7 @@ launch_template_configs = {
   frontend = {
     name          = "frontend"
     instance_type = "t2.micro"              # Free Tier eligible
-    image_id      = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (adjust as needed)
+    image_id      = "ami-0453ec754f44f9a4a" # Amazon Linux 2 AMI (adjust as needed)
     user_data     = <<-EOF
                     #!/bin/bash
                     yum update -y
@@ -29,7 +29,7 @@ launch_template_configs = {
       }
     ]
     iam_instance_profile = {
-      name = "frontend-instance-profile"
+      name = "web"
     }
     monitoring = {
       enabled = true
@@ -55,7 +55,7 @@ launch_template_configs = {
   backend = {
     name          = "backend"
     instance_type = "t2.micro"              # Free Tier eligible
-    image_id      = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (adjust as needed)
+    image_id      = "ami-0453ec754f44f9a4a" # Amazon Linux 2 AMI (adjust as needed)
     user_data     = <<-EOF
                     #!/bin/bash
                     yum update -y
@@ -82,7 +82,7 @@ launch_template_configs = {
       }
     ]
     iam_instance_profile = {
-      name = "backend-instance-profile"
+      name = "backend"
     }
     monitoring = {
       enabled = true
