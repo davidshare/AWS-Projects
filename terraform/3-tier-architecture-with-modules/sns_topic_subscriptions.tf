@@ -23,7 +23,7 @@ variable "sns_topic_subscriptions" {
 module "sns_topic_subscription" {
   for_each = var.sns_topic_subscriptions
 
-  source = "../../../terraform-aws-modules/sns_topic_subscription"
+  source = "github.com/davidshare/terraform-aws-modules//sns_topic_subscription?ref=sns_topic_subscription-v1.0.0"
 
   topic_arn             = module.sns_topic[each.value.topic_arn].arn
   protocol              = each.value.protocol

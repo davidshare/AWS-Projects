@@ -12,7 +12,7 @@ variable "security_groups" {
 module "security_group" {
   for_each = var.security_groups
 
-  source = "../../../terraform-aws-modules/security_group"
+  source = "github.com/davidshare/terraform-aws-modules//security_group?ref=security_group-v1.0.0"
 
   name                   = each.value.name
   description            = each.value.description

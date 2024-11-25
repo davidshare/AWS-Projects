@@ -23,7 +23,7 @@ variable "db_instances" {
 module "db_instances" {
   for_each = var.db_instances
 
-  source = "../../../terraform-aws-modules/db_instance"
+  source = "github.com/davidshare/terraform-aws-modules//db_instance?ref=db_instance-v1.0.0"
 
   identifier                   = each.value.identifier
   instance_class               = each.value.instance_class

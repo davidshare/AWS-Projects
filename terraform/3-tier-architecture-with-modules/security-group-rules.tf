@@ -33,7 +33,7 @@ variable "egress_rules" {
 module "vpc_security_group_ingress_rule" {
   count = length(var.ingress_rules)
 
-  source = "../../../terraform-aws-modules/vpc_security_group_ingress_rule"
+  source = "github.com/davidshare/terraform-aws-modules//vpc_security_group_ingress_rule?ref=vpc_security_group_ingress_rule-v1.0.0"
 
   security_group_id = module.security_group[var.ingress_rules[count.index].security_group_id].id
   from_port         = var.ingress_rules[count.index].from_port
@@ -53,7 +53,7 @@ module "vpc_security_group_ingress_rule" {
 module "vpc_security_group_egress_rule" {
   count = length(var.egress_rules)
 
-  source = "../../../terraform-aws-modules/vpc_security_group_egress_rule"
+  source = "github.com/davidshare/terraform-aws-modules//vpc_security_group_egress_rule?ref=vpc_security_group_egress_rule-v1.0.0"
 
   security_group_id = module.security_group[var.egress_rules[count.index].security_group_id].id
   from_port         = var.egress_rules[count.index].from_port

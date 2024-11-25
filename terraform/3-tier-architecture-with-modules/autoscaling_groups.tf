@@ -22,7 +22,7 @@ variable "autoscaling_groups" {
 module "autoscaling_group" {
   for_each = var.autoscaling_groups
 
-  source = "../../../terraform-aws-modules/autoscaling_group"
+  source = "github.com/davidshare/terraform-aws-modules//autoscaling_group?ref=autoscaling_group-v1.0.0"
 
   name                      = each.value.name
   max_size                  = each.value.max_size

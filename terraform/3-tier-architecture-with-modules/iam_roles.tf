@@ -24,7 +24,7 @@ variable "roles" {
 module "roles" {
   for_each = var.roles
 
-  source = "../../../terraform-aws-modules/iam_role"
+  source = "github.com/davidshare/terraform-aws-modules//iam_role?ref=iam_role-v1.0.0"
 
   name                  = each.value.name
   path                  = each.value.path

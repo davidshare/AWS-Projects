@@ -13,7 +13,7 @@ variable "sns_topics" {
 module "sns_topic" {
   for_each = var.sns_topics
 
-  source = "../../../terraform-aws-modules/sns_topic"
+  source = "github.com/davidshare/terraform-aws-modules//sns_topic?ref=sns_topic-v1.0.0"
 
   name                        = each.value.name
   display_name                = each.value.display_name

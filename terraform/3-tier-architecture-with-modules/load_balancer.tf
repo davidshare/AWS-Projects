@@ -20,7 +20,7 @@ variable "loadbalancers" {
 module "loadbalancer" {
   for_each = var.loadbalancers
 
-  source = "../../../terraform-aws-modules/alb"
+  source = "github.com/davidshare/terraform-aws-modules//alb?ref=alb-v1.0.0"
 
   name                       = each.value.name
   internal                   = each.value.internal

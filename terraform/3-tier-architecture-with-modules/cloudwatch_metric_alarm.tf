@@ -71,7 +71,7 @@ variable "cloudwatch_metric_alarms" {
 module "cloudwatch_metric_alarm" {
   for_each = var.cloudwatch_metric_alarms
 
-  source = "../../../terraform-aws-modules/cloudwatch_metric_alarm"
+  source = "github.com/davidshare/terraform-aws-modules//cloudwatch_metric_alarm?ref=cloudwatch_metric_alarm-v1.0.0"
 
   alarm_name          = each.value.alarm_name
   comparison_operator = each.value.comparison_operator

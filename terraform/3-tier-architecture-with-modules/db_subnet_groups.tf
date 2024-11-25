@@ -11,7 +11,7 @@ variable "db_subnet_groups" {
 module "db_subnet_groups" {
   for_each = var.db_subnet_groups
 
-  source = "../../../terraform-aws-modules/db_subnet_group"
+  source = "github.com/davidshare/terraform-aws-modules//db_subnet_group?ref=db_subnet_group-v1.0.0"
 
   name        = each.value.name
   description = each.value.description

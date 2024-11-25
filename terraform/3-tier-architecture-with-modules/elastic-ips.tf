@@ -10,7 +10,7 @@ variable "elastic_ips" {
 module "elastic_ip" {
   for_each = var.elastic_ips
 
-  source = "../../../terraform-aws-modules/elastic_ip"
+  source = "github.com/davidshare/terraform-aws-modules//elastic_ip?ref=elastic_ip-v1.0.0"
 
   domain = each.value.domain
   tags   = merge(each.value.tags, local.tags)

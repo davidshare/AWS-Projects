@@ -15,7 +15,7 @@ variable "network_acl_rules" {
 module "network_acl_rules" {
   for_each = var.network_acl_rules
 
-  source = "../../../terraform-aws-modules/network_acl_rule"
+  source = "github.com/davidshare/terraform-aws-modules//network_acl_rule?ref=network_acl_rule-v1.0.0"
 
   network_acl_id = module.network_acl[each.value.network_acl].network_acl_id
   rule_number    = each.value.rule_number

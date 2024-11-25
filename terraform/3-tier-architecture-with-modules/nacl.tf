@@ -10,7 +10,7 @@ variable "network_acls" {
 module "network_acl" {
   for_each = var.network_acls
 
-  source = "../../../terraform-aws-modules/network_acl"
+  source = "github.com/davidshare/terraform-aws-modules//network_acl?ref=network_acl-v1.0.0"
 
   vpc_id     = module.vpc[each.value.vpc].id
   subnet_ids = flatten([for subnet in each.value.subnets : module.subnets[subnet].id])

@@ -40,7 +40,7 @@ variable "nat_gateway_routes" {
 module "route_table" {
   for_each = var.route_tables
 
-  source = "../../../terraform-aws-modules/route_table"
+  source = "github.com/davidshare/terraform-aws-modules//route_table?ref=route_table-v1.0.0"
 
   vpc_id = module.vpc[each.value.vpc].id
   tags   = merge(each.value.tags, local.tags)
@@ -50,7 +50,7 @@ module "route_table" {
 module "subnets_route_table_associations" {
   for_each = var.subnets_route_table_association
 
-  source = "../../../terraform-aws-modules/route_table_association"
+  source = "github.com/davidshare/terraform-aws-modules//route_table_association?ref=route_table_association-v1.0.0"
 
   subnet_id      = module.subnets[each.value.subnet].id
   route_table_id = module.route_table[each.value.route_table].id
@@ -62,7 +62,7 @@ module "subnets_route_table_associations" {
 module "internet_gateway_routes" {
   for_each = var.internet_gateway_routes
 
-  source = "../../../terraform-aws-modules/route"
+  source = "github.com/davidshare/terraform-aws-modules//route?ref=route-v1.0.0"
 
   route_table_id         = module.route_table[each.value.route_table].id
   destination_cidr_block = each.value.cidr
@@ -75,7 +75,7 @@ module "internet_gateway_routes" {
 module "nat_gateway_routes" {
   for_each = var.nat_gateway_routes
 
-  source = "../../../terraform-aws-modules/route"
+  source = "github.com/davidshare/terraform-aws-modules//route?ref=route-v1.0.0"
 
   route_table_id         = module.route_table[each.value.route_table].id
   destination_cidr_block = each.value.cidr

@@ -21,7 +21,7 @@ variable "secretsmanager_secret_versions" {
 module "secretsmanager_secrets" {
   for_each = var.secretsmanager_secrets
 
-  source = "../../../terraform-aws-modules/secretsmanager_secret"
+  source = "github.com/davidshare/terraform-aws-modules//secretsmanager_secret?ref=secretsmanager_secret-v1.0.0"
 
   name        = each.value.name
   description = each.value.description
@@ -31,7 +31,7 @@ module "secretsmanager_secrets" {
 module "secretsmanager_secret_versions" {
   for_each = var.secretsmanager_secret_versions
 
-  source = "../../../terraform-aws-modules/secretsmanager_secret_version"
+  source = "github.com/davidshare/terraform-aws-modules//secretsmanager_secret_version?ref=secretsmanager_secret_version-v1.0.0"
 
   secret_id      = module.secretsmanager_secrets[each.value.secret].arn
   secret_string  = jsonencode(each.value.secret_string)

@@ -17,7 +17,7 @@ variable "lb_listeners" {
 module "lb_listener" {
   for_each = var.lb_listeners
 
-  source = "../../../terraform-aws-modules/lb_listener"
+  source = "github.com/davidshare/terraform-aws-modules//lb_listener?ref=lb_listener-v1.0.0"
 
   load_balancer_arn = module.loadbalancer[each.value.load_balancer].arn
   port              = each.value.port

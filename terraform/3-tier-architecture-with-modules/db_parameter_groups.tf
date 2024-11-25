@@ -14,7 +14,7 @@ variable "db_parameter_groups" {
 module "db_parameter_groups" {
   for_each = var.db_parameter_groups
 
-  source = "../../../terraform-aws-modules/db_parameter_group"
+  source = "github.com/davidshare/terraform-aws-modules//db_parameter_group?ref=db_parameter_group-v1.0.0"
 
   family      = each.value.family
   description = each.value.description

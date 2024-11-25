@@ -11,7 +11,7 @@ variable "instance_profiles" {
 module "instance_profile" {
   for_each = var.instance_profiles
 
-  source = "../../../terraform-aws-modules/iam_instance_profile"
+  source = "github.com/davidshare/terraform-aws-modules//iam_instance_profile?ref=iam_instance_profile-v1.0.0"
 
   name = each.value.name
   role = module.roles[each.value.role].name

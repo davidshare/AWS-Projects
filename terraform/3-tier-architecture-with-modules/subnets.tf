@@ -13,7 +13,7 @@ variable "subnets" {
 module "subnets" {
   for_each = var.subnets
 
-  source = "../../../terraform-aws-modules/subnet/"
+  source = "github.com/davidshare/terraform-aws-modules//subnet?ref=subnet-v1.0.0"
 
   vpc_id                  = module.vpc[each.value.vpc_name].id
   cidr_block              = each.value.cidr_block

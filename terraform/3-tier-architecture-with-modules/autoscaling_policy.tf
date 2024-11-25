@@ -29,7 +29,7 @@ variable "autoscaling_group_policies" {
 module "autoscaling_policy" {
   for_each = var.autoscaling_group_policies
 
-  source = "../../../terraform-aws-modules/autoscaling_policy"
+  source = "github.com/davidshare/terraform-aws-modules//autoscaling_policy?ref=autoscaling_policy-v1.0.0"
 
   name                          = each.value.name
   autoscaling_group_name        = module.autoscaling_group[each.value.autoscaling_group].name

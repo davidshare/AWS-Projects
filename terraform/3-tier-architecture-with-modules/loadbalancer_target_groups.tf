@@ -31,7 +31,7 @@ variable "lb_target_groups" {
 module "lb_target_group" {
   for_each = var.lb_target_groups
 
-  source = "../../../terraform-aws-modules/lb_target_group"
+  source = "github.com/davidshare/terraform-aws-modules//lb_target_group?ref=lb_target_group-v1.0.0"
 
   name               = each.value.name
   protocol           = each.value.protocol

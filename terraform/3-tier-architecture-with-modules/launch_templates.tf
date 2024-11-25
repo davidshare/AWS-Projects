@@ -18,7 +18,7 @@ variable "launch_template_configs" {
 
 
 module "launch_templates" {
-  source = "../../../terraform-aws-modules/launch_template"
+  source = "github.com/davidshare/terraform-aws-modules//launch_template?ref=launch_template-v1.0.0"
 
   for_each = var.launch_template_configs
 

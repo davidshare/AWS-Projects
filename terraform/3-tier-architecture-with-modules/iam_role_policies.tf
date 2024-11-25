@@ -17,7 +17,7 @@ variable "role_policies" {
 module "role_policies" {
   for_each = var.role_policies
 
-  source = "../../../terraform-aws-modules/iam_role_policy"
+  source = "github.com/davidshare/terraform-aws-modules//iam_role_policy?ref=iam_role_policy-v1.0.0"
 
   name   = each.value.name
   role   = module.roles[each.value.role].name
