@@ -35,3 +35,5 @@ override.tf.json
 terraform.rc
 .vscode
 terraform/autoscaling-3-tier-architecture/davidessien
+*.zip
+combine.sh
