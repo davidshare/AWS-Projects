@@ -1,0 +1,1 @@
+team_emails = ["dev1@company.com", "dev2@company.com", "manager@company.com"]
