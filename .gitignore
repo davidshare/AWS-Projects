@@ -37,3 +37,4 @@ terraform.rc
 terraform/autoscaling-3-tier-architecture/davidessien
 *.zip
 combine.sh
+project-combined.txt

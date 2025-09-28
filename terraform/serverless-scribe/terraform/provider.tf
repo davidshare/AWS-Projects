@@ -10,7 +10,21 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
+  profile = "localstack"
   region  = "us-east-1"
-  profile = "cyber1admin"
-}
 
+  # LocalStack specific settings
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+
+  endpoints {
+    apigateway              = "http://localhost:4566"
+    cloudwatch              = "http://localhost:4566"
+    cognitoidentityprovider = "http://localhost:4566"
+    dynamodb                = "http://localhost:4566"
+    iam                     = "http://localhost:4566"
+    lambda                  = "http://localhost:4566"
+    s3                      = "http://localhost:4566"
+  }
+}
