@@ -67,20 +67,20 @@ class PostsManager {
       container.innerHTML = posts
         .map(
           (post) => `
-                <tr>
-                    <td>${Utils.escapeHtml(post.title)}</td>
-                    <td>${Utils.escapeHtml(post.author)}</td>
-                    <td>${Utils.formatDate(post.publish_date)}</td>
-                    <td>
-                        <button onclick="postsManager.editPost('${
-                          post.post_id
-                        }')">Edit</button>
-                        <button onclick="postsManager.deletePost('${
-                          post.post_id
-                        }')" class="danger">Delete</button>
-                    </td>
-                </tr>
-            `
+      <tr>
+        <td>${Utils.escapeHtml(post.title)}</td>
+        <td>${Utils.escapeHtml(post.author)}</td>
+        <td>${Utils.formatDate(post.publish_date)}</td>
+        <td>
+          <button data-action="edit" data-post-id="${
+            post.post_id
+          }">Edit</button>
+          <button data-action="delete" data-post-id="${
+            post.post_id
+          }" class="danger">Delete</button>
+        </td>
+      </tr>
+    `
         )
         .join("");
     } else {

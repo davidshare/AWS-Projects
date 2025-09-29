@@ -119,7 +119,8 @@ def create_post(data, claims):
         }
 
     post_id = str(uuid.uuid4())
-    slug = data.get("title", "").lower().replace(" ", "-")
+    base_slug = title.lower().replace(" ", "-")
+    slug = f"{base_slug}-{post_id[:8]}"
     item = {
         "post_id": post_id,
         "title": data.get("title", ""),
@@ -342,6 +343,7 @@ def generate_and_upload_html(post_id, item):
     <!DOCTYPE html>
     <html>
     <head>
+        <meta charset="UTF-8">
         <title>{html.escape(item["title"])}</title>
         <link rel="stylesheet" href="/css/styles.css">
     </head>

@@ -5,6 +5,23 @@ class AdminManager {
     this.setupEventListeners();
   }
 
+  bindPostActions() {
+    const buttons = document.querySelectorAll(
+      "#posts-table button[data-action]"
+    );
+    buttons.forEach((button) => {
+      const action = button.dataset.action;
+      const postId = button.dataset.postId;
+      button.onclick = () => {
+        if (action === "edit") {
+          this.postsManager.editPost(postId);
+        } else if (action === "delete") {
+          this.postsManager.deletePost(postId);
+        }
+      };
+    });
+  }
+
   setupEventListeners() {
     // Post form
     const postForm = document.getElementById("post-form");
@@ -81,6 +98,10 @@ class AdminManager {
 
       // Load posts
       this.postsManager.loadPosts(1);
+
+      this.postsManager.loadPosts(1).then(() => {
+        this.bindPostActions();
+      });
 
       // Update username display
       const usernameEl = document.getElementById("admin-username");
