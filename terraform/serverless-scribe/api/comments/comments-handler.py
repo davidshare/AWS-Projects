@@ -1,4 +1,5 @@
 import json
+import logging
 import boto3
 import uuid
 from datetime import datetime
@@ -7,6 +8,8 @@ import os
 
 dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table(os.environ["DYNAMODB_COMMENTS_TABLE"])
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def add_cors_headers(response):
@@ -24,6 +27,14 @@ def add_cors_headers(response):
 
 
 def lambda_handler(event, context):
+    logger.info(f"Processing {event['httpMethod']} request")
+    logger.info(
+        {
+            "method": event.get("httpMethod"),
+            "path": event.get("path"),
+            "user": claims.get("cognito:username") if claims else "anonymous",
+        }
+    )
     print("Comments event:", json.dumps(event))
 
     http_method = event.get("httpMethod", "GET")

@@ -118,11 +118,11 @@ resource "aws_apigatewayv2_route" "comments_get" {
 }
 
 # Default Route (for handling undefined routes)
-resource "aws_apigatewayv2_route" "default" {
-  api_id    = aws_apigatewayv2_api.blog_api.id
-  route_key = "$default"
-  target    = "integrations/${aws_apigatewayv2_integration.posts_integration.id}"
-}
+# resource "aws_apigatewayv2_route" "default" {
+#   api_id    = aws_apigatewayv2_api.blog_api.id
+#   route_key = "$default"
+#   target    = "integrations/${aws_apigatewayv2_integration.posts_integration.id}"
+# }
 
 # API Stage
 resource "aws_apigatewayv2_stage" "prod" {

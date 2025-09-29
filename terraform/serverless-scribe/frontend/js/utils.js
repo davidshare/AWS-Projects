@@ -58,13 +58,18 @@ class Utils {
       const fullUrl = endpoint.startsWith("http")
         ? endpoint
         : `${API_BASE}${endpoint}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       const response = await fetch(fullUrl, {
+        signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
           ...options.headers,
         },
         ...options,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -82,6 +87,9 @@ class Utils {
 
       return await response.json();
     } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error("Request timeout");
+      }
       console.error("API call failed:", error);
       throw error;
     }

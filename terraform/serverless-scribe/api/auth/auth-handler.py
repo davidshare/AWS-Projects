@@ -7,6 +7,20 @@ cognito = boto3.client("cognito-idp")
 user_pool_id = os.environ["COGNITO_USER_POOL_ID"]
 
 
+def add_cors_headers(response):
+    """Add CORS headers to response"""
+    headers = response.get("headers", {})
+    headers.update(
+        {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token",
+        }
+    )
+    response["headers"] = headers
+    return response
+
+
 def lambda_handler(event, context):
     print("Auth event:", json.dumps(event))
 
@@ -14,16 +28,18 @@ def lambda_handler(event, context):
     path = event.get("rawPath", "")
 
     if http_method == "OPTIONS":
-        return {
-            "statusCode": 200,
-            "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token",
-                "Access-Control-Allow-Credentials": "true",
-            },
-            "body": "",
-        }
+        return add_cors_headers(
+            {
+                "statusCode": 200,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token",
+                    "Access-Control-Allow-Credentials": "true",
+                },
+                "body": "",
+            }
+        )
 
     try:
         if http_method == "POST" and "/auth/login" in path:
@@ -34,18 +50,22 @@ def lambda_handler(event, context):
             )
             return create_user(event.get("body", "{}"), claims)
         else:
-            return {
-                "statusCode": 400,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "Invalid request"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 400,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": "Invalid request"}),
+                }
+            )
     except Exception as e:
         print("Error:", str(e))
-        return {
-            "statusCode": 500,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": str(e)}),
-        }
+        return add_cors_headers(
+            {
+                "statusCode": 500,
+                "headers": {"Content-Type": "application/json"},
+                "body": json.dumps({"error": str(e)}),
+            }
+        )
 
 
 def login(body):
@@ -56,11 +76,13 @@ def login(body):
         password = data.get("password", "").strip()
 
         if not client_id or not username or not password:
-            return {
-                "statusCode": 400,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "Missing required fields"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 400,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": "Missing required fields"}),
+                }
+            )
 
         response = cognito.initiate_auth(
             ClientId=client_id,
@@ -68,37 +90,47 @@ def login(body):
             AuthParameters={"USERNAME": username, "PASSWORD": password},
         )
 
-        return {
-            "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps(
-                {
-                    "id_token": response["AuthenticationResult"]["IdToken"],
-                    "access_token": response["AuthenticationResult"]["AccessToken"],
-                    "refresh_token": response["AuthenticationResult"]["RefreshToken"],
-                }
-            ),
-        }
+        return add_cors_headers(
+            {
+                "statusCode": 200,
+                "headers": {"Content-Type": "application/json"},
+                "body": json.dumps(
+                    {
+                        "id_token": response["AuthenticationResult"]["IdToken"],
+                        "access_token": response["AuthenticationResult"]["AccessToken"],
+                        "refresh_token": response["AuthenticationResult"][
+                            "RefreshToken"
+                        ],
+                    }
+                ),
+            }
+        )
     except ClientError as e:
         error_message = str(e)
         if "NotAuthorizedException" in error_message:
-            return {
-                "statusCode": 401,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "Invalid username or password"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 401,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": "Invalid username or password"}),
+                }
+            )
         elif "UserNotFoundException" in error_message:
-            return {
-                "statusCode": 404,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "User not found"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 404,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": "User not found"}),
+                }
+            )
         else:
-            return {
-                "statusCode": 500,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": error_message}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 500,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": error_message}),
+                }
+            )
 
 
 def create_user(body, claims):
@@ -106,11 +138,15 @@ def create_user(body, claims):
         # Check if user is admin
         groups = claims.get("cognito:groups", [])
         if "Admins" not in groups:
-            return {
-                "statusCode": 403,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "Unauthorized - Admin access required"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 403,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps(
+                        {"error": "Unauthorized - Admin access required"}
+                    ),
+                }
+            )
 
         data = json.loads(body)
         username = data.get("username", "").strip()
@@ -118,11 +154,13 @@ def create_user(body, claims):
         group = data.get("group", "").strip()
 
         if not username or not email:
-            return {
-                "statusCode": 400,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "Missing required fields"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 400,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": "Missing required fields"}),
+                }
+            )
 
         # Create user
         response = cognito.admin_create_user(
@@ -150,22 +188,28 @@ def create_user(body, claims):
                 UserPoolId=user_pool_id, Username=username, GroupName=group
             )
 
-        return {
-            "statusCode": 201,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"message": "User created successfully"}),
-        }
+        return add_cors_headers(
+            {
+                "statusCode": 201,
+                "headers": {"Content-Type": "application/json"},
+                "body": json.dumps({"message": "User created successfully"}),
+            }
+        )
     except ClientError as e:
         error_message = str(e)
         if "UsernameExistsException" in error_message:
-            return {
-                "statusCode": 409,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "User already exists"}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 409,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": "User already exists"}),
+                }
+            )
         else:
-            return {
-                "statusCode": 500,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": error_message}),
-            }
+            return add_cors_headers(
+                {
+                    "statusCode": 500,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps({"error": error_message}),
+                }
+            )

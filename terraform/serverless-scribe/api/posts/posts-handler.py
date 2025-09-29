@@ -1,4 +1,5 @@
 import json
+import logging
 import boto3
 import html
 import os
@@ -10,6 +11,8 @@ dynamodb = boto3.resource("dynamodb")
 s3 = boto3.client("s3")
 posts_table = dynamodb.Table(os.environ["DYNAMODB_POSTS_TABLE"])
 bucket = os.environ["S3_BUCKET"]
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def add_cors_headers(response):
@@ -27,6 +30,14 @@ def add_cors_headers(response):
 
 
 def lambda_handler(event, context):
+    logger.info(f"Processing {event['httpMethod']} request")
+    logger.info(
+        {
+            "method": event.get("httpMethod"),
+            "path": event.get("path"),
+            "user": claims.get("cognito:username") if claims else "anonymous",
+        }
+    )
     print("Received event:", json.dumps(event))
 
     http_method = event.get("httpMethod", "GET")
@@ -85,6 +96,20 @@ def lambda_handler(event, context):
 
 
 def create_post(data, claims):
+    title = data.get("title", "").strip()
+    content = data.get("content", "").strip()
+
+    if not title or len(title) > 200:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Title must be between 1-200 characters"}),
+        }
+
+    if not content or len(content) > 10000:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Content must be between 1-10000 characters"}),
+        }
     if not claims.get("cognito:username"):
         return {
             "statusCode": 403,
@@ -148,19 +173,59 @@ def list_posts(params):
         page = int(params.get("page", 1))
         limit = int(params.get("limit", 10))
 
+        # Input validation
+        if page < 1:
+            page = 1
+        if limit < 1 or limit > 100:
+            limit = 10
+
+        # Calculate the starting point (simplified - in production use LastEvaluatedKey)
+        start_index = (page - 1) * limit
+
+        # For now, we'll scan but with limit - you should implement GSI in production
         response = posts_table.scan(Limit=limit)
+
         items = response.get("Items", [])
+
+        # Sort by publish_date descending (most recent first)
+        items.sort(key=lambda x: x.get("publish_date", ""), reverse=True)
+
+        # Simple client-side pagination (replace with proper DynamoDB pagination in production)
+        total_items = len(items)
+        start_idx = (page - 1) * limit
+        end_idx = start_idx + limit
+        paginated_items = items[start_idx:end_idx]
+
+        logger.info(f"Retrieved {len(paginated_items)} posts for page {page}")
 
         return {
             "statusCode": 200,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps(items),
+            "body": json.dumps(
+                {
+                    "posts": paginated_items,
+                    "metadata": {
+                        "totalPosts": total_items,
+                        "totalPages": max(1, (total_items + limit - 1) // limit),
+                        "currentPage": page,
+                        "postsPerPage": limit,
+                    },
+                }
+            ),
+        }
+    except ValueError as e:
+        logger.warning(f"Invalid pagination parameters: {params}", e)
+        return {
+            "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": "Invalid page or limit parameter"}),
         }
     except ClientError as e:
+        logger.error(f"DynamoDB error: {str(e)}")
         return {
             "statusCode": 500,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": str(e)}),
+            "body": json.dumps({"error": "Unable to retrieve posts"}),
         }
 
 
