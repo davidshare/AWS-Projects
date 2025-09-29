@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "blog_bucket" {
-  bucket = local.generated_bucket_name
+  bucket = "${var.project_name}-${data.aws_caller_identity.current.account_id}"
   tags = {
     Name        = "${var.project_name}-bucket"
     Environment = "prod"

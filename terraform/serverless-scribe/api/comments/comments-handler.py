@@ -27,6 +27,13 @@ def add_cors_headers(response):
 
 
 def lambda_handler(event, context):
+    print("Comments event:", json.dumps(event))
+
+    http_method = event.get("httpMethod", "GET")
+    path_parameters = event.get("pathParameters", {}) or {}
+    post_id = path_parameters.get("post_id")
+
+    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
     logger.info(f"Processing {event['httpMethod']} request")
     logger.info(
         {
@@ -35,11 +42,6 @@ def lambda_handler(event, context):
             "user": claims.get("cognito:username") if claims else "anonymous",
         }
     )
-    print("Comments event:", json.dumps(event))
-
-    http_method = event.get("httpMethod", "GET")
-    path_parameters = event.get("pathParameters", {}) or {}
-    post_id = path_parameters.get("post_id")
 
     # Handle OPTIONS requests for CORS
     if http_method == "OPTIONS":

@@ -6,6 +6,7 @@ import os
 import uuid
 from datetime import datetime
 from botocore.exceptions import ClientError
+from boto3.dynamodb.conditions import Key
 
 dynamodb = boto3.resource("dynamodb")
 s3 = boto3.client("s3")
@@ -30,6 +31,12 @@ def add_cors_headers(response):
 
 
 def lambda_handler(event, context):
+    print("Received event:", json.dumps(event))
+
+    http_method = event.get("httpMethod", "GET")
+    path_parameters = event.get("pathParameters", {}) or {}
+    post_id = path_parameters.get("post_id")
+    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
     logger.info(f"Processing {event['httpMethod']} request")
     logger.info(
         {
@@ -38,12 +45,6 @@ def lambda_handler(event, context):
             "user": claims.get("cognito:username") if claims else "anonymous",
         }
     )
-    print("Received event:", json.dumps(event))
-
-    http_method = event.get("httpMethod", "GET")
-    path_parameters = event.get("pathParameters", {}) or {}
-    post_id = path_parameters.get("post_id")
-    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
 
     print(f"Method: {http_method}, Post ID: {post_id}")
 
@@ -179,34 +180,28 @@ def list_posts(params):
         if limit < 1 or limit > 100:
             limit = 10
 
-        # Calculate the starting point (simplified - in production use LastEvaluatedKey)
-        start_index = (page - 1) * limit
-
-        # For now, we'll scan but with limit - you should implement GSI in production
-        response = posts_table.scan(Limit=limit)
+        # Use query with your existing GSI
+        response = posts_table.query(
+            IndexName="publish_date_index",
+            KeyConditionExpression=Key("status").eq("published"),
+            ScanIndexForward=False,  # Most recent first (descending by publish_date)
+            Limit=limit,
+        )
 
         items = response.get("Items", [])
+        total_posts = len(items)  # For now, this is just the current page
 
-        # Sort by publish_date descending (most recent first)
-        items.sort(key=lambda x: x.get("publish_date", ""), reverse=True)
-
-        # Simple client-side pagination (replace with proper DynamoDB pagination in production)
-        total_items = len(items)
-        start_idx = (page - 1) * limit
-        end_idx = start_idx + limit
-        paginated_items = items[start_idx:end_idx]
-
-        logger.info(f"Retrieved {len(paginated_items)} posts for page {page}")
+        logger.info(f"Retrieved {len(items)} posts for page {page}")
 
         return {
             "statusCode": 200,
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps(
                 {
-                    "posts": paginated_items,
+                    "posts": items,
                     "metadata": {
-                        "totalPosts": total_items,
-                        "totalPages": max(1, (total_items + limit - 1) // limit),
+                        "totalPosts": total_posts,
+                        "totalPages": max(1, (total_posts + limit - 1) // limit),
                         "currentPage": page,
                         "postsPerPage": limit,
                     },
@@ -379,5 +374,4 @@ def generate_and_upload_html(post_id, item):
         Key=f"posts/{item['slug']}.html",
         Body=html_content,
         ContentType="text/html",
-        ACL="public-read",
     )

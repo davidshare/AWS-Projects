@@ -44,6 +44,7 @@ resource "aws_iam_policy" "lambda_policy" {
         ]
         Resource = [
           aws_dynamodb_table.blog_posts.arn,
+          "${aws_dynamodb_table.blog_posts.arn}/index/*",
           aws_dynamodb_table.blog_comments.arn
         ]
       },

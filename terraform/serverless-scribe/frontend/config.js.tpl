@@ -1,5 +1,5 @@
 
-const API_BASE = '${api_endpoint}/prod';
+const API_BASE = '${api_endpoint}/prod'.trim();
 const CLIENT_ID = '${app_client_id}';
 const BUCKET_NAME = '${bucket_name}';
 

@@ -1,10 +1,13 @@
 import json
+import logging
 import boto3
 import os
 from botocore.exceptions import ClientError
 
 cognito = boto3.client("cognito-idp")
 user_pool_id = os.environ["COGNITO_USER_POOL_ID"]
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def add_cors_headers(response):
@@ -25,7 +28,17 @@ def lambda_handler(event, context):
     print("Auth event:", json.dumps(event))
 
     http_method = event.get("httpMethod", "GET")
-    path = event.get("rawPath", "")
+    path = event.get("path", "")
+
+    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
+    logger.info(f"Processing {event['httpMethod']} request")
+    logger.info(
+        {
+            "method": event.get("httpMethod"),
+            "path": event.get("path"),
+            "user": claims.get("cognito:username") if claims else "anonymous",
+        }
+    )
 
     if http_method == "OPTIONS":
         return add_cors_headers(
@@ -89,6 +102,20 @@ def login(body):
             AuthFlow="USER_PASSWORD_AUTH",
             AuthParameters={"USERNAME": username, "PASSWORD": password},
         )
+
+        if "ChallengeName" in response:
+            return add_cors_headers(
+                {
+                    "statusCode": 400,
+                    "headers": {"Content-Type": "application/json"},
+                    "body": json.dumps(
+                        {
+                            "error": "Password change required",
+                            "challenge": response["ChallengeName"],
+                        }
+                    ),
+                }
+            )
 
         return add_cors_headers(
             {
