@@ -135,3 +135,28 @@ resource "aws_apigatewayv2_stage" "prod" {
     Environment = "prod"
   }
 }
+
+# OPTIONS routes for CORS preflight
+resource "aws_apigatewayv2_route" "options_auth" {
+  api_id    = aws_apigatewayv2_api.blog_api.id
+  route_key = "OPTIONS /auth/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.auth_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "options_posts" {
+  api_id    = aws_apigatewayv2_api.blog_api.id
+  route_key = "OPTIONS /posts/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.posts_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "options_comments" {
+  api_id    = aws_apigatewayv2_api.blog_api.id
+  route_key = "OPTIONS /comments/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.comments_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "options_users" {
+  api_id    = aws_apigatewayv2_api.blog_api.id
+  route_key = "OPTIONS /users"
+  target    = "integrations/${aws_apigatewayv2_integration.auth_integration.id}"
+}

@@ -13,6 +13,18 @@ def lambda_handler(event, context):
     http_method = event.get("httpMethod", "GET")
     path = event.get("rawPath", "")
 
+    if http_method == "OPTIONS":
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token",
+                "Access-Control-Allow-Credentials": "true",
+            },
+            "body": "",
+        }
+
     try:
         if http_method == "POST" and "/auth/login" in path:
             return login(event.get("body", "{}"))

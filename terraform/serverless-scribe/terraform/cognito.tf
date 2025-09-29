@@ -53,7 +53,7 @@ resource "aws_cognito_user" "admin_user" {
   user_pool_id = aws_cognito_user_pool.blog_user_pool.id
   username     = "admin"
   attributes = {
-    email = "devopsforge@gmail.com"
+    email = "devopsforger@gmail.com"
   }
 }
 
