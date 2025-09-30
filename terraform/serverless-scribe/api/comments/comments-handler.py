@@ -27,24 +27,18 @@ def add_cors_headers(response):
 
 
 def lambda_handler(event, context):
-    print("Comments event:", json.dumps(event))
+    print("=== COMMENTS LAMBDA INVOCATION ===")
+    print("Full event:", json.dumps(event))
 
     http_method = event.get("httpMethod", "GET")
     path_parameters = event.get("pathParameters", {}) or {}
     post_id = path_parameters.get("post_id")
 
-    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
-    logger.info(f"Processing {event['httpMethod']} request")
-    logger.info(
-        {
-            "method": event.get("httpMethod"),
-            "path": event.get("path"),
-            "user": claims.get("cognito:username") if claims else "anonymous",
-        }
-    )
+    print(f"Method: {http_method}, Post ID: {post_id}, Path Params: {path_parameters}")
 
     # Handle OPTIONS requests for CORS
     if http_method == "OPTIONS":
+        print("Handling OPTIONS request")
         return {
             "statusCode": 200,
             "headers": {
@@ -58,10 +52,15 @@ def lambda_handler(event, context):
 
     try:
         if http_method == "GET" and post_id:
+            print(f"Getting comments for post: {post_id}")
             return add_cors_headers(get_comments(post_id))
         elif http_method == "POST":
-            return add_cors_headers(add_comment(event.get("body", "{}")))
+            print("Adding new comment")
+            body = event.get("body", "{}")
+            print(f"Request body: {body}")
+            return add_cors_headers(add_comment(body))
         else:
+            print(f"Invalid request: {http_method} {post_id}")
             return add_cors_headers(
                 {
                     "statusCode": 400,
@@ -70,7 +69,10 @@ def lambda_handler(event, context):
                 }
             )
     except Exception as e:
-        print("Error:", str(e))
+        print("Error in comments handler:", str(e))
+        import traceback
+
+        print("Traceback:", traceback.format_exc())
         return add_cors_headers(
             {
                 "statusCode": 500,

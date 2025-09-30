@@ -1,16 +1,10 @@
 // Comments functionality for individual post pages
-function getPostIdFromUrl() {
-  const path = window.location.pathname;
-  const match = path.match(/\/posts\/([a-z0-9-]+)\.html$/);
-  return match ? match[1] : null;
-}
-
 class CommentsManager {
   constructor() {
-    this.apiBase = window.API_BASE;
-    this.postId = getPostIdFromUrl();
+    this.apiBase = API_BASE; // Use the constant from config.js
+    this.postId = window.postId;
     if (!this.postId) {
-      console.error("Post ID not found in URL");
+      console.error("Post ID not found in window.postId");
       return;
     }
     this.init();
@@ -27,26 +21,34 @@ class CommentsManager {
       commentForm.addEventListener("submit", (e) =>
         this.handleCommentSubmit(e)
       );
+    } else {
+      console.error("Comment form not found!");
     }
   }
 
   async loadComments() {
     try {
       const commentsList = document.getElementById("comments-list");
-      if (!commentsList) return;
+      if (!commentsList) {
+        console.error("Comments list element not found");
+        return;
+      }
 
       commentsList.innerHTML = '<div class="loading">Loading comments...</div>';
 
-      const response = await fetch(`${this.apiBase}/comments/${this.postId}`);
+      const url = `${this.apiBase}/comments/${this.postId}`;
+
+      const response = await fetch(url);
+
       if (!response.ok) {
-        throw new Error("Failed to load comments");
+        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
       }
 
       const comments = await response.json();
       this.displayComments(comments);
     } catch (error) {
       console.error("Error loading comments:", error);
-      this.showError("Failed to load comments");
+      this.showError("Failed to load comments: " + error.message);
     }
   }
 
@@ -83,31 +85,44 @@ class CommentsManager {
     const authorInput = document.getElementById("author");
     const commentInput = document.getElementById("comment");
 
+    if (!authorInput || !commentInput) {
+      console.error("Form inputs not found");
+      return;
+    }
+
     const author = authorInput.value.trim();
     const text = commentInput.value.trim();
 
     if (!author || !text) {
-      alert("Please fill in both name and comment fields");
+      this.showError("Please fill in both name and comment fields");
       return;
     }
 
     try {
-      const response = await fetch(`${this.apiBase}/comments`, {
+      const url = `${this.apiBase}/comments`;
+      const payload = {
+        post_id: this.postId,
+        author: author,
+        text: text,
+      };
+
+
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          post_id: this.postId,
-          author: author,
-          text: text,
-        }),
+        body: JSON.stringify(payload),
       });
 
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to submit comment");
+        const errorText = await response.text();
+        console.error("Server error:", errorText);
+        throw new Error(errorText || "Failed to submit comment");
       }
+
+      const result = await response.json();
 
       // Clear form
       authorInput.value = "";
@@ -175,7 +190,10 @@ class CommentsManager {
 
 // Initialize comments manager when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
-  if (typeof window.postId !== "undefined") {
+
+  if (typeof window.postId !== "undefined" && window.postId) {
     window.commentsManager = new CommentsManager();
+  } else {
+    console.error("Cannot initialize CommentsManager: postId is undefined");
   }
 });

@@ -339,6 +339,11 @@ def delete_post(post_id, claims):
 
 
 def generate_and_upload_html(post_id, item):
+    # Get the API base URL from environment, ensure it includes the stage
+    api_base_url = os.environ.get("API_BASE_URL", "")
+    if api_base_url and not api_base_url.endswith("/prod"):
+        api_base_url = f"{api_base_url}/prod"
+
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -363,6 +368,10 @@ def generate_and_upload_html(post_id, item):
             </form>
         </div>
         <script src="/js/config.js"></script>
+        <script>
+            window.postId = '{post_id}';
+            console.log('Post page loaded with postId:', window.postId);
+        </script>
         <script src="/js/comments.js"></script>
     </body>
     </html>
