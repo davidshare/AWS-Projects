@@ -62,6 +62,7 @@ resource "aws_iam_policy" "lambda_policy" {
         Action = [
           "cognito-idp:AdminCreateUser",
           "cognito-idp:AdminAddUserToGroup",
+          "cognito-idp:AdminSetUserPassword",
           "cognito-idp:InitiateAuth"
         ]
         Resource = aws_cognito_user_pool.blog_user_pool.arn

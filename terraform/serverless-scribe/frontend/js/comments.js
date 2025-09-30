@@ -1,8 +1,18 @@
 // Comments functionality for individual post pages
+function getPostIdFromUrl() {
+  const path = window.location.pathname;
+  const match = path.match(/\/posts\/([a-z0-9-]+)\.html$/);
+  return match ? match[1] : null;
+}
+
 class CommentsManager {
   constructor() {
-    this.apiBase = window.apiBase || `${window.location.origin}/prod`;
-    this.postId = window.postId;
+    this.apiBase = window.API_BASE;
+    this.postId = getPostIdFromUrl();
+    if (!this.postId) {
+      console.error("Post ID not found in URL");
+      return;
+    }
     this.init();
   }
 

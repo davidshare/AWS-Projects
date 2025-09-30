@@ -362,10 +362,7 @@ def generate_and_upload_html(post_id, item):
                 <button type="submit">Submit Comment</button>
             </form>
         </div>
-        <script>
-            const postId = '{post_id}';
-            const apiBase = '{os.environ.get("API_BASE_URL", "")}';
-        </script>
+        <script src="/js/config.js"></script>
         <script src="/js/comments.js"></script>
     </body>
     </html>
