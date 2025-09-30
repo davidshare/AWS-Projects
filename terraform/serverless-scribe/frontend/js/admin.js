@@ -3,23 +3,20 @@ class AdminManager {
   constructor() {
     this.postsManager = new PostsManager(true);
     this.setupEventListeners();
+    this.setupEventDelegation();
   }
 
-  bindPostActions() {
-    const buttons = document.querySelectorAll(
-      "#posts-table button[data-action]"
-    );
-    buttons.forEach((button) => {
-      const action = button.dataset.action;
-      const postId = button.dataset.postId;
-      button.onclick = () => {
-        if (action === "edit") {
-          this.postsManager.editPost(postId);
-        } else if (action === "delete") {
-          this.postsManager.deletePost(postId);
-        }
-      };
-    });
+  setupEventDelegation() {
+    const postsTable = document.getElementById("posts-table");
+    if (postsTable) {
+      // Remove any existing event listeners
+      postsTable.removeEventListener("click", this.handleTableClick);
+
+      // Add new event listener
+      this.handleTableClick = this.handleTableClick.bind(this);
+      postsTable.addEventListener("click", this.handleTableClick);
+      console.log("Event delegation setup for posts table");
+    }
   }
 
   setupEventListeners() {
@@ -98,10 +95,6 @@ class AdminManager {
 
       // Load posts
       this.postsManager.loadPosts(1);
-
-      this.postsManager.loadPosts(1).then(() => {
-        this.bindPostActions();
-      });
 
       // Update username display
       const usernameEl = document.getElementById("admin-username");
